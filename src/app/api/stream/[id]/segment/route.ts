@@ -3,14 +3,14 @@ import { prisma } from "@/lib/db";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-const NewSegment = z.object({
+const newSegmentSchema = z.object({
     index: z.number(),
     timestamp: z.number(),
     filename: z.string(),
     duration: z.number(),
 });
 
-export const POST = postHandler(NewSegment, async (params: { id: string }, segment) => {
+export const POST = postHandler(newSegmentSchema, async (params: { id: string }, segment) => {
     const { id: fixtureId } = params;
     const stream = await prisma.stream.findUniqueOrThrow({
         where: { fixtureId },
