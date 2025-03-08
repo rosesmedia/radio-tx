@@ -1,4 +1,4 @@
-import { action } from "@/lib/actions";
+import { postHandler } from "@/lib/handlers";
 import { prisma } from "@/lib/db";
 import { NextResponse } from "next/server";
 import { z } from "zod";
@@ -8,7 +8,7 @@ const SegmentReady = z.object({
     ready: z.boolean().refine(arg => arg === true),
 });
 
-export const POST = action(SegmentReady, async (params: { id: string }, body) => {
+export const POST = postHandler(SegmentReady, async (params: { id: string }, body) => {
     const { id: fixtureId } = params;
     const result = await prisma.hlsSegment.update({
         data: {

@@ -1,4 +1,4 @@
-import { action } from "@/lib/actions";
+import { postHandler } from "@/lib/handlers";
 import { prisma } from "@/lib/db";
 import { NextResponse } from "next/server";
 import { z } from "zod";
@@ -10,7 +10,7 @@ const NewSegment = z.object({
     duration: z.number(),
 });
 
-export const POST = action(NewSegment, async (params: { id: string }, segment) => {
+export const POST = postHandler(NewSegment, async (params: { id: string }, segment) => {
     const { id: fixtureId } = params;
     const stream = await prisma.stream.findUniqueOrThrow({
         where: { fixtureId },
