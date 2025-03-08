@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum StreamState {
+  Pending
+  Live
+  Complete
+}
+
+model Stream {
+  fixtureId String      @id
+  name      String
+  state     StreamState @default(Pending)
+
+  HlsSegment HlsSegment[]
+}
+
+model HlsSegment {
+  fixtureId String
+  index     Int
+  timestamp Int
+  filename  String  @unique
+  duration  Float
+  ready     Boolean @default(false)
+
+  stream Stream @relation(fields: [fixtureId], references: [fixtureId], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([fixtureId, index])
+}
