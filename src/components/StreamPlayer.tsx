@@ -44,7 +44,13 @@ function StreamPlayerInner({ streamId }: Props) {
         if (audio.current.canPlayType(HLS_MIME)) {
             audio.current.src = streamUrl;
         } else if (Hls.isSupported()) {
-            const hls = new Hls();
+            const hls = new Hls({
+                // we need to use the worker to avoid this until we can fix the liquidsoap script
+                // https://github.com/savonet/liquidsoap/issues/4398
+                // https://github.com/video-dev/hls.js/issues/7075
+                enableWorker: true,
+                workerPath: new URL('../../node_modules/hls.js/dist/hls.worker.js', import.meta.url).toString(),
+            });
             hls.loadSource(streamUrl);
             hls.attachMedia(audio.current);
             return () => hls.destroy();
