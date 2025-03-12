@@ -29,7 +29,7 @@ export const GET = getHandler(async ({ id }: { id: string }) => {
     resp.push('#EXT-X-MEDIA-SEQUENCE:0');
     // resp.push('#EXT-X-DISCONTINUITY-SEQUENCE:0');
     resp.push('#EXT-X-PLAYLIST-TYPE:EVENT');
-    const entries = stream.HlsSegment.map(segment => `#EXTINF:${segment.duration},\n${env.HLS_SEGMENTS_URL}${segment.filename}`);
+    const entries = stream.HlsSegment.map(segment => `#EXTINF:${segment.duration},\n${env.HLS_SEGMENTS_URL}/${segment.filename}`);
 
     if (stream.state === 'Complete') {
         entries.push('#EXT-X-ENDLIST');
