@@ -1,0 +1,6 @@
+/* work around https://github.com/mantinedev/mantine/issues/7539 */
+@supports (-moz-appearance: none) {
+    input[readonly][aria-haspopup] {
+        pointer-events: auto !important;
+    }
+}
