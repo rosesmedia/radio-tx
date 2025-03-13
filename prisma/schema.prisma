@@ -13,10 +13,22 @@ enum StreamState {
   Complete
 }
 
+model IngestPoint {
+  id String @id @default(cuid())
+  name String
+  icecastServer String
+  icecastMount String
+
+  streams Stream[]
+}
+
 model Stream {
   fixtureId String      @id
   name      String
   state     StreamState @default(Pending)
+
+  ingestPoint IngestPoint? @relation(fields: [ingestPointId], references: [id])
+  ingestPointId String?
 
   HlsSegment HlsSegment[]
 }

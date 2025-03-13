@@ -5,7 +5,7 @@ import { useDisclosure } from "@mantine/hooks";
 import Image from "next/image";
 import rosesLogomarkSmall from "@/assets/Roses_logomark_small.png";
 import Link from "next/link";
-import { IconHome } from "@tabler/icons-react";
+import { IconHome, IconMicrophone } from "@tabler/icons-react";
 import { usePathname } from "next/navigation";
 import StreamsIcon from "./StreamsIcon";
 
@@ -37,6 +37,7 @@ export default function DashboardShell({ children, isAnyStreamLive }: { children
       <AppShell.Navbar p="md">
         <NavLink component={Link} href="/dashboard" label="Home" leftSection={<IconHome />} active={pathname === "/dashboard"} />
         <NavLink component={Link} href="/dashboard/streams" label="Streams" leftSection={<StreamsIcon isAnyStreamLive={isAnyStreamLive} />} active={pathname.startsWith("/dashboard/streams")} />
+        <NavLink component={Link} href="/dashboard/ingest" label="Ingest" leftSection={<IconMicrophone />} active={pathname.startsWith("/dashboard/ingest")} />
       </AppShell.Navbar>
 
       <AppShell.Main>{children}</AppShell.Main>
