@@ -2,3 +2,5 @@
   hosts: streaming
   roles:
     - liquidsoap
+    - stream-controller
+    - nginx

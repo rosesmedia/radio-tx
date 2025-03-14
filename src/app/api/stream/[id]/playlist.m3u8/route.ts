@@ -31,7 +31,7 @@ export const GET = getHandler(async ({ id }: { id: string }) => {
   resp.push('#EXT-X-PLAYLIST-TYPE:EVENT');
   const entries = stream.HlsSegment.map(
     (segment) =>
-      `#EXTINF:${segment.duration},\n${env.HLS_SEGMENTS_URL}/${segment.filename}`
+      `#EXTINF:${segment.duration},\n${env.HLS_SEGMENTS_URL}/${stream.fixtureId}/${segment.filename}`
   );
 
   if (stream.state === 'Complete') {

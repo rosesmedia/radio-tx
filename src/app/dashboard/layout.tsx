@@ -2,6 +2,7 @@
 
 import DashboardShell from '@/components/DashboardShell';
 import { prisma } from '@/lib/db';
+import { Notifications } from '@mantine/notifications';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 
@@ -24,6 +25,7 @@ export default async function DashboardLayout({
 
   return (
     <DashboardShell isAnyStreamLive={isAnyStreamLive}>
+      <Notifications />
       {children}
     </DashboardShell>
   );

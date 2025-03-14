@@ -16,12 +16,12 @@ end
 
 icecast_server = get_env("ICECAST_SERVER")
 icecast_mount = get_env("ICECAST_MOUNT")
-jack_id = get_env("JACK_ID")
+ingest_id = get_env("INGEST_ID")
 
-ob = audio_to_stereo(input.http("#{icecast_server}/#{icecast_mount}"))
+ob = stereo(input.http("#{icecast_server}/#{icecast_mount}", self_sync=false))
 
 beeps = metronome(12.0, frequency=1000.0)
 
-out = fallback([ob, beeps])
+out = fallback([ob, beeps], track_sensitive=false)
 
-output.jack(id=jack_id, out)
+output.jack(id="ingest_#{ingest_id}", out)

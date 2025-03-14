@@ -1,0 +1,13 @@
+- name: Install polkit
+  ansible.builtin.apt:
+    pkg:
+      - polkitd
+  become: true
+- name: Install polkit rule
+  ansible.builtin.template:
+    src: templates/10-stream-controller.rules.j2
+    dest: /etc/polkit-1/rules.d/10-stream-controller.rules
+    owner: root
+    group: root
+    mode: 0644
+  become: true

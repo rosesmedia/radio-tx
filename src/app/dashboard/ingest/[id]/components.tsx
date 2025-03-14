@@ -6,7 +6,7 @@ import { deleteIngestPoint } from './actions';
 import { resultMessage } from '@/lib/form-types';
 
 export function DeleteButton({ id }: { id: string }) {
-  const [deleteState, triggerDelete, deletePending] = useActionState(
+  const [state, action, pending] = useActionState(
     () =>
       deleteIngestPoint({
         id,
@@ -16,13 +16,13 @@ export function DeleteButton({ id }: { id: string }) {
 
   return (
     <>
-      <Text aria-live="polite">{resultMessage(deleteState)}</Text>
+      <Text aria-live="polite">{resultMessage(state)}</Text>
       <Group>
         <Button
           color="red"
-          loading={deletePending}
+          loading={pending}
           onClick={() => {
-            startTransition(triggerDelete);
+            startTransition(action);
           }}
         >
           Delete

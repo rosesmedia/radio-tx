@@ -7,3 +7,7 @@ export function notFound() {
 export function internalServerError() {
   return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
 }
+
+export function badRequest() {
+  return NextResponse.json({ error: 'Bad request' }, { status: 400 });
+}

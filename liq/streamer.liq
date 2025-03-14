@@ -17,12 +17,24 @@ end
 stream_id = get_env("STREAM_ID")
 api_base = get_env("STREAM_API_BASE")
 
-in = input.jack(id="stream_in")
+def notify_ready() =
+  # TODO: troubleshoot why this doesn't correctly send the request
+  log.info("notify ready")
+  _ = http.post(
+    data = json.stringify({}),
+    headers = [("Content-Type", "application/json; charset=UTF-8")],
+    "#{api_base}/api/stream/#{stream_id}/ready"
+  )
+end
+
+on_start(notify_ready)
+
+in = input.jack(id="streamer_#{stream_id}")
 
 aac_high =
   %ffmpeg(
     format = "mpegts",
-    %audio(codec = "aac", channels = 2, ar = 44100, b = "192k")
+    %audio(codec = "aac", channels = 2, ar = 48000, b = "192k")
   )
 
 streams = [("aac_high", aac_high)]
@@ -65,7 +77,7 @@ output.file.hls(
   segment_name=segment_name,
   on_file_change=segment_changed,
   persist_at="./hls.state",
-  "./hls/",
+  "/var/www/hls/#{stream_id}/",
   streams,
   in
 )

@@ -1,7 +1,8 @@
 import StreamPlayer from '@/components/StreamPlayer';
 import { prisma } from '@/lib/db';
-import { Title } from '@mantine/core';
+import { Group, Title } from '@mantine/core';
 import { notFound } from 'next/navigation';
+import { EndStreamButton, GoLiveButton } from './components';
 
 export default async function StreamPage({
   params,
@@ -23,11 +24,23 @@ export default async function StreamPage({
     <>
       <Title order={1}>{stream.name}</Title>
 
+      <Group>
+        {stream.ingestPointId && stream.state === 'Pending' && (
+          <GoLiveButton id={stream.fixtureId} />
+        )}
+      </Group>
+
       {stream.state !== 'Pending' && (
         <StreamPlayer
           streamId={stream.fixtureId}
           isLive={stream.state === 'Live'}
         />
+      )}
+
+      {stream.state === 'Live' && (
+        <Group>
+          <EndStreamButton id={stream.fixtureId} />
+        </Group>
       )}
     </>
   );
