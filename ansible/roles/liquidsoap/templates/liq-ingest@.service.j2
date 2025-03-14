@@ -1,0 +1,13 @@
+# {{ ansible_managed }}
+[Unit]
+Description=Liquidsoap OB input for ingest point %i
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/liq-ingest.sh %i
+EnvironmentFile=/etc/streaming.env
+User=streaming
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

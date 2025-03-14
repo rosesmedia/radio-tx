@@ -1,0 +1,68 @@
+# liquidsoap's upstream .deb packages depend on newer versions of ffmpeg that are in deb-multimedia
+- name: Install deb-multimedia key
+  ansible.builtin.apt:
+    deb: https://www.deb-multimedia.org/pool/main/d/deb-multimedia-keyring/deb-multimedia-keyring_2024.9.1_all.deb
+  become: true
+- name: Add deb-multimedia repo
+  ansible.builtin.apt_repository:
+    repo: deb [signed-by=/usr/share/keyrings/deb-multimedia-keyring.pgp] https://www.deb-multimedia.org bookworm main non-free
+    filename: dmo
+  become: true
+
+- name: Install liquidsoap
+  ansible.builtin.apt:
+    deb: https://github.com/savonet/liquidsoap/releases/download/v2.3.1/liquidsoap_2.3.1-debian-bookworm-1_amd64.deb
+  become: true
+
+- name: Install required dependencies
+  ansible.builtin.apt:
+    pkg:
+      - jq
+      - curl
+  become: true
+
+- name: Make liquidsoap scripts directory
+  ansible.builtin.file:
+    state: directory
+    path: "/usr/local/libexec/liquidsoap"
+    owner: root
+    mode: 0755
+  become: true
+
+- name: Install liquidsoap scripts
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: /usr/local/libexec/liquidsoap/
+    owner: root
+    mode: 0744
+  with_fileglob:
+    - '../../../liq/*.liq'
+  become: true
+
+- name: Install other scripts
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: /usr/local/bin/
+    owner: root
+    mode: 0755
+  with_fileglob:
+    - '../../../scripts/*.sh'
+  become: true
+
+- name: Create systemd streaming service
+  ansible.builtin.template:
+    src: templates/liq-streamer@.service.j2
+    dest: /etc/systemd/system/liq-streamer@.service
+    owner: root
+    group: root
+    mode: 0644
+  become: true
+
+- name: Create systemd ingest service
+  ansible.builtin.template:
+    src: templates/liq-ingest@.service.j2
+    dest: /etc/systemd/system/liq-ingest@.service
+    owner: root
+    group: root
+    mode: 0644
+  become: true

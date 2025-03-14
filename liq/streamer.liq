@@ -1,17 +1,21 @@
 #!/usr/bin/env liquidsoap
 
-settings.server.telnet := true
+settings.frame.audio.channels := 2
+settings.frame.audio.samplerate := 48000
 
-stream_id = "abcde"
+def get_env(key) =
+  value = environment.get(key)
+  if value != "" then
+    value
+  else
+    log.critical("Must set the `#{key}` environment variable")
+    shutdown(code=123)
+    ""
+  end
+end
 
-# in = input.srt(
-#     bind_address = "0.0.0.0",
-#     mode = "listener",
-#     port = 8889,
-#     start = true,
-# )
-
-# in = mksafe(in)
+stream_id = get_env("STREAM_ID")
+api_base = get_env("STREAM_API_BASE")
 
 in = input.jack(id="stream_in")
 
@@ -27,7 +31,7 @@ def segment_name(metadata) =
   let timestamp = int_of_float(time())
   let {stream_name, duration, position, extname} = metadata
   let filename = "#{stream_name}_#{duration}_#{timestamp}_#{position}.#{extname}"
-  http.post(
+  _ = http.post(
     data = json.stringify({
       index = position,
       timestamp = timestamp,
@@ -35,7 +39,7 @@ def segment_name(metadata) =
       duration = duration,
     }),
     headers = [("Content-Type", "application/json; charset=UTF-8")],
-    "http://localhost:3000/api/stream/#{stream_id}/segment"
+    "#{api_base}/api/stream/#{stream_id}/segment"
   )
   filename
 end
@@ -48,7 +52,7 @@ def segment_changed(~state, filename) =
         ready = true,
       }),
       headers = [("Content-Type", "application/json; charset=UTF-8")],
-      "http://localhost:3000/api/stream/#{stream_id}/segment/ready",
+      "#{api_base}/api/stream/#{stream_id}/segment/ready",
     )
   end
 end
