@@ -13,15 +13,12 @@ async function sendRequest(path: string): Promise<void> {
   if (!env.STREAM_CONTROLLER_URL) {
     return;
   }
-  const res = await fetch(
-    `${env.STREAM_CONTROLLER_URL}${path}`,
-    {
-      method: 'POST',
-      headers: {
-        'User-Agent': USER_AGENT,
-      },
-    }
-  );
+  const res = await fetch(`${env.STREAM_CONTROLLER_URL}${path}`, {
+    method: 'POST',
+    headers: {
+      'User-Agent': USER_AGENT,
+    },
+  });
   if (!res.ok) {
     console.log(res.status);
     const body = await res.json();
@@ -44,8 +41,11 @@ export const notifyIngestUpdated = notifyIngest('update');
 export const notifyIngestDeleted = notifyIngest('delete');
 
 export const notifyStreamStart = notifyStream('start');
-export const notifyStreamStop = notifyStream('stop')
+export const notifyStreamStop = notifyStream('stop');
 
-export function notifyStreamStarted(streamId: string, ingestId: string): Promise<void> {
+export function notifyStreamStarted(
+  streamId: string,
+  ingestId: string
+): Promise<void> {
   return sendRequest(`/stream/${streamId}/patch/${ingestId}`);
 }

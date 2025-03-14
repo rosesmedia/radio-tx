@@ -1,5 +1,5 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const startStreamSchema = z.object({
-    id: z.string(),
+  id: z.string(),
 });

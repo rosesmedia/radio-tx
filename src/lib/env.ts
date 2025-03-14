@@ -23,9 +23,11 @@ const envSchema = z.object({
   DASHBOARD_PASS: z.string(),
 });
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export function validateEnv(
   env?: any
 ): NodeJS.ProcessEnv | z.infer<typeof envSchema> {
+  /* eslint-enable @typescript-eslint/no-explicit-any */
   if (process.env.SKIP_ENV_VALIDATION === '1') return process.env;
   const envResult = envSchema.safeParse(env ?? process.env);
   if (!envResult.success) {

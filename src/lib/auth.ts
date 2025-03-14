@@ -10,7 +10,7 @@ export const authOptions: AuthOptions = {
         username: { label: 'Username', type: 'text' },
         password: { label: 'Password', type: 'password' },
       },
-      async authorize(credentials, _req) {
+      async authorize(credentials) {
         // TODO: better auth
         if (
           credentials &&

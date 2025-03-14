@@ -3,7 +3,6 @@
 import { useForm, zodResolver } from '@mantine/form';
 import { createIngestPoint } from './actions';
 import { Button, Group, TextInput } from '@mantine/core';
-import { redirect } from 'next/navigation';
 import { createIngestPointSchema } from './schema';
 
 export function NewIngestPointForm() {
