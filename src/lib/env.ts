@@ -8,7 +8,8 @@ const envSchema = z.object({
     HLS_SEGMENTS_URL: z.string()
         .refine(s => !s.endsWith('/'), 'HLS_SEGMENTS_URL must not end with a `/`'),
     STREAM_CONTROLLER_URL: z.string()
-        .refine(s => !s.endsWith('/'), 'STREAM_CONTROLLER_URL most not end with a `/`'),
+        .refine(s => !s.endsWith('/'), 'STREAM_CONTROLLER_URL most not end with a `/`')
+        .optional(),
     DASHBOARD_USER: z.string(),
     DASHBOARD_PASS: z.string(),
 });

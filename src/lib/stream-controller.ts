@@ -11,6 +11,9 @@ const errorSchema = z.object({
 
 function notify(action: string): (id: string) => Promise<void> {
     return async (id) => {
+        if (!env.STREAM_CONTROLLER_URL) {
+            return;
+        }
         const res = await fetch(`${env.STREAM_CONTROLLER_URL}/ingest/${id}/${action}`, {
             method: 'POST',
             headers: {
