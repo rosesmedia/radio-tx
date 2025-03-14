@@ -1,5 +1,5 @@
-import { Stream, StreamState } from "@prisma/client";
-import { IconAlertTriangle, IconExclamationMark, IconHeadphones } from "@tabler/icons-react";
+import { Stream } from "@prisma/client";
+import { IconAlertTriangle, IconHeadphones } from "@tabler/icons-react";
 
 import unavailable from "@/components/StreamStatusIndicator/unavailable.svg";
 import live from "@/components/StreamStatusIndicator/live.svg";

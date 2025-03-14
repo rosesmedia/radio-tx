@@ -30,7 +30,6 @@ export function NewIngestPointForm() {
             alert("Something went wrong! Check the browser console for details.");
             return;
           }
-          redirect(`/dashboard/ingest`);
         }
       }}
     >

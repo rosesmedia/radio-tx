@@ -10,7 +10,7 @@ export const authOptions: AuthOptions = {
                 username: { label: "Username", type: "text" },
                 password: { label: "Password", type: "password" },
             },
-            async authorize(credentials, req) {
+            async authorize(credentials, _req) {
                 // TODO: better auth
                 if (credentials && credentials.username === env.DASHBOARD_USER && credentials.password === env.DASHBOARD_PASS) {
                     return {

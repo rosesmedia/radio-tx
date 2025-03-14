@@ -57,7 +57,7 @@ function StreamPlayerInner({ streamId }: Props) {
         } else {
             console.error('StreamPlayerInner initialised when HLS is not supported. This should not happen!');
         }
-    }, [streamId]);
+    }, [streamUrl]);
 
   return <audio controls ref={audio} />;
 }

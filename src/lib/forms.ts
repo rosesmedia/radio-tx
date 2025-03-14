@@ -1,24 +1,10 @@
 import { getServerSession, User } from "next-auth";
-import { z, ZodIssue, ZodTypeAny } from "zod";
+import { z, ZodTypeAny } from "zod";
 import { authOptions } from "./auth";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { env } from "process";
-
-export type Result<T = void> = {
-    ok: true;
-    data: T;
-} | {
-    ok: false;
-    error: 'permission';
-} | {
-    ok: false;
-    error: 'validation';
-    issues: ZodIssue[];
-} | {
-    ok: false,
-    error: 'internal-server-error';
-    messsage: string;
-};
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { Result, SafeError } from "./form-types";
 
 export function action<T extends ZodTypeAny, R = void>(
     schema: T,
@@ -47,11 +33,18 @@ export function action<T extends ZodTypeAny, R = void>(
             if (isRedirectError(e)) {
                 throw e;
             }
+            if (e instanceof PrismaClientKnownRequestError && e.code === 'P2025') {
+                return {
+                    ok: false,
+                    error: 'not-found',
+                };
+            }
             console.error('an error has occured', e);
+            const showMessage = e instanceof SafeError || env.NODE_ENV !== 'production';
             return {
                 ok: false,
                 error: 'internal-server-error',
-                messsage: env.NODE_ENV === 'development' ? `An error occured: ${e}` : 'An internal server error has occured',
+                messsage: showMessage ? `An error occured: ${e}` : 'An internal server error has occured',
             };
         }
     }
