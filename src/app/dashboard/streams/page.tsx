@@ -1,12 +1,20 @@
-import { StreamStatusIndicator } from "@/components/StreamStatusIndicator";
-import { prisma } from "@/lib/db";
-import { Button, Table, TableTbody, TableTd, TableTh, TableThead, TableTr } from "@mantine/core";
-import Link from "next/link";
+import { StreamStatusIndicator } from '@/components/StreamStatusIndicator';
+import { prisma } from '@/lib/db';
+import {
+  Button,
+  Table,
+  TableTbody,
+  TableTd,
+  TableTh,
+  TableThead,
+  TableTr,
+} from '@mantine/core';
+import Link from 'next/link';
 
 export default async function StreamsPage() {
   const streams = await prisma.stream.findMany({
     orderBy: {
-      fixtureId: "asc",
+      fixtureId: 'asc',
     },
   });
 
@@ -16,7 +24,9 @@ export default async function StreamsPage() {
         <StreamStatusIndicator stream={stream} />
       </TableTd>
       <TableTd>
-        <Link href={`/dashboard/streams/${stream.fixtureId}`}>{stream.name}</Link>
+        <Link href={`/dashboard/streams/${stream.fixtureId}`}>
+          {stream.name}
+        </Link>
       </TableTd>
       <TableTd>{stream.fixtureId}</TableTd>
     </TableTr>
@@ -24,7 +34,9 @@ export default async function StreamsPage() {
 
   return (
     <>
-      <Button component={Link} href='/dashboard/streams/new'>New stream</Button>
+      <Button component={Link} href="/dashboard/streams/new">
+        New stream
+      </Button>
       <Table striped>
         <TableThead>
           <TableTr>

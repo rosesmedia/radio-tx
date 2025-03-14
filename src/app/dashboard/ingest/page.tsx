@@ -1,11 +1,19 @@
-import { prisma } from "@/lib/db";
-import { Button, Table, TableTbody, TableTd, TableTh, TableThead, TableTr } from "@mantine/core";
-import Link from "next/link";
+import { prisma } from '@/lib/db';
+import {
+  Button,
+  Table,
+  TableTbody,
+  TableTd,
+  TableTh,
+  TableThead,
+  TableTr,
+} from '@mantine/core';
+import Link from 'next/link';
 
 export default async function IngestPage() {
   const ingestPoints = await prisma.ingestPoint.findMany({
     orderBy: {
-      name: "asc",
+      name: 'asc',
     },
   });
 

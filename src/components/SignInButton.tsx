@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { Button } from "@mantine/core";
-import Link from "next/link";
+import { Button } from '@mantine/core';
+import Link from 'next/link';
 
 export function SignInButton() {
   return (
