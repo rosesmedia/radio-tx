@@ -29,3 +29,17 @@ yarn dev
 </picture>
 
 [Click here if the image is too small](/docs/roses_radio_tx_v1.3.png)
+
+### Components
+
+#### NextJS app
+
+Implements all the UI, as well as keeping track of HLS chunks and serving playlists.
+
+#### stream-controller
+
+A rust service that handles management of the actual audio-processing services, which are managed as systemd units and mostly written in liquidsoap and bash.
+
+#### Liquidsoap scripts
+
+Handle pulling audio from icecast into JACK, as well as generating HLS chunks and notifying the main NextJS app that they are now available.
