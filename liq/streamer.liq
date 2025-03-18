@@ -18,16 +18,15 @@ stream_id = get_env("STREAM_ID")
 api_base = get_env("STREAM_API_BASE")
 
 def notify_ready() =
-  # TODO: troubleshoot why this doesn't correctly send the request
-  log.info("notify ready")
-  _ = http.post(
-    data = json.stringify({}),
+  # the endpoint doesn't need any request body values, but liquidsoap json.stringify serialises {} as an empty array
+  ignore(http.post(
+    data = json.stringify({
+      ready = true,
+    }),
     headers = [("Content-Type", "application/json; charset=UTF-8")],
     "#{api_base}/api/stream/#{stream_id}/ready"
-  )
+  ))
 end
-
-on_start(notify_ready)
 
 in = input.jack(id="streamer_#{stream_id}")
 
@@ -43,7 +42,7 @@ def segment_name(metadata) =
   let timestamp = int_of_float(time())
   let {stream_name, duration, position, extname} = metadata
   let filename = "#{stream_name}_#{duration}_#{timestamp}_#{position}.#{extname}"
-  _ = http.post(
+  ignore(http.post(
     data = json.stringify({
       index = position,
       timestamp = timestamp,
@@ -52,20 +51,20 @@ def segment_name(metadata) =
     }),
     headers = [("Content-Type", "application/json; charset=UTF-8")],
     "#{api_base}/api/stream/#{stream_id}/segment"
-  )
+  ))
   filename
 end
 
 def segment_changed(~state, filename) =
   if state == "created" then
-    _ = http.post(
+    ignore(http.post(
       data = json.stringify({
         filename = path.basename(filename),
         ready = true,
       }),
       headers = [("Content-Type", "application/json; charset=UTF-8")],
       "#{api_base}/api/stream/#{stream_id}/segment/ready",
-    )
+    ))
   end
 end
 
@@ -74,6 +73,7 @@ output.file.hls(
   segment_duration=4.0,
   segments=5,
   segments_overhead=null(),
+  on_start=notify_ready,
   segment_name=segment_name,
   on_file_change=segment_changed,
   persist_at="./hls.state",
