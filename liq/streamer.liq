@@ -65,6 +65,8 @@ end
 
 def segment_changed(~state, filename) =
   if state == "created" then
+    # TODO: eliminate this double-request because they can sometimes arrive out-of-order
+    # (esp if the streamer script restarts)
     ignore(http.post(
       data = json.stringify({
         filename = path.basename(filename),
