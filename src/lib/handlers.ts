@@ -47,6 +47,8 @@ export function postHandler<Params, Body>(
       return NextResponse.json({
         error: 'Bad request',
         issues: parseResult.error.issues,
+      }, {
+        status: 400,
       });
     }
   };
