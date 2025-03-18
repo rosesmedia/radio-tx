@@ -33,7 +33,15 @@ in = input.jack(id="streamer_#{stream_id}")
 aac_high =
   %ffmpeg(
     format = "mpegts",
-    %audio(codec = "aac", channels = 2, ar = 48000, b = "192k")
+    interleaved = false,
+    %audio(
+      codec = "libfdk_aac",
+      channels = 2,
+      ar = 48000,
+      b = "192k",
+      afterburner = 1,
+      profile = "aac_low"
+    )
   )
 
 streams = [("aac_high", aac_high)]
