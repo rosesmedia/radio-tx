@@ -27,6 +27,7 @@ export const GET = getHandler(async ({ id }: { id: string }) => {
   resp.push('#EXT-X-TARGETDURATION:4');
   resp.push('#EXT-X-VERSION:3');
   resp.push('#EXT-X-MEDIA-SEQUENCE:0');
+  resp.push(`#PLAYLIST:${stream.name}`);
   // resp.push('#EXT-X-DISCONTINUITY-SEQUENCE:0');
   resp.push('#EXT-X-PLAYLIST-TYPE:EVENT');
   const entries = stream.HlsSegment.map(
