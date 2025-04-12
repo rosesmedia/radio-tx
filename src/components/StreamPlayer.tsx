@@ -1,6 +1,15 @@
 'use client';
 
-import { ActionIcon, Alert, Group, Loader, Slider } from '@mantine/core';
+import {
+  ActionIcon,
+  Alert,
+  Center,
+  Group,
+  Loader,
+  Slider,
+  Stack,
+  Text,
+} from '@mantine/core';
 import {
   IconAlertSquareRounded,
   IconPlayerPause,
@@ -17,17 +26,12 @@ interface Props {
 
 const HLS_MIME = 'application/vnd.apple.mpegurl';
 
-function formatTimestamp(
-  timestamp: number,
-  includeSeconds: boolean = false
-): string {
-  const seconds = Math.round(timestamp % 60);
-  const minutes = Math.round((timestamp / 60) % 60);
-  const hours = Math.round(timestamp / 3600);
-  const hhmm = `${hours}:${minutes.toString().padStart(2, '0')}`;
-  return includeSeconds
-    ? `${hhmm}:${seconds.toString().padStart(2, '0')}`
-    : hhmm;
+function formatTimestamp(timestamp: number): string {
+  const seconds = Math.floor(timestamp % 60);
+  const minutes = Math.floor((timestamp / 60) % 60);
+  const hours = Math.floor(timestamp / 3600);
+  const mmss = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  return hours !== 0 ? `${hours}:${mmss}` : mmss;
 }
 
 function supportsHls(): boolean {
@@ -42,7 +46,11 @@ export default function StreamPlayer(props: Props) {
   }, []);
 
   if (supported === null) {
-    return <Loader />;
+    return (
+      <Center>
+        <Loader color='red' />
+      </Center>
+    );
   } else if (supported) {
     return <StreamPlayerInner {...props} />;
   } else {
@@ -116,7 +124,7 @@ function StreamPlayerInner({ streamId }: Props) {
   }, [audio, loading]);
 
   return (
-    <div>
+    <Stack>
       <audio
         ref={audio}
         onPlay={() => setIsPaused(false)}
@@ -128,20 +136,23 @@ function StreamPlayerInner({ streamId }: Props) {
         onDurationChange={(e) => setDuration(e.currentTarget.duration)}
       />
 
-      <br />
+      <Group>
+        <Text>{formatTimestamp(currentTime)}</Text>
 
-      <Slider
-        color="red"
-        min={0}
-        max={duration}
-        value={currentTime}
-        onChange={(value) => {
-          if (!audio.current) return;
-          audio.current.currentTime = value;
-        }}
-        label={(v) => formatTimestamp(v, true)}
-        disabled={loading}
-      />
+        <Slider
+          color="red"
+          flex={1}
+          min={0}
+          max={duration}
+          value={currentTime}
+          onChange={(value) => {
+            if (!audio.current) return;
+            audio.current.currentTime = value;
+          }}
+          label={(v) => formatTimestamp(v)}
+          disabled={loading}
+        />
+      </Group>
 
       <br />
 
@@ -182,6 +193,6 @@ function StreamPlayerInner({ streamId }: Props) {
           <IconRewindForward10 size={32} color="red" />
         </ActionIcon>
       </Group>
-    </div>
+    </Stack>
   );
 }

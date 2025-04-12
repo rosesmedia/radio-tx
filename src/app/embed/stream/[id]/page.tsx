@@ -20,7 +20,7 @@ export default async function StreamEmbed({
   }
 
   return (
-    <Container>
+    <Container pt={16}>
       <StreamPlayer streamId={stream.fixtureId} />
     </Container>
   );

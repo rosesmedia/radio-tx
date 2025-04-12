@@ -1,6 +1,7 @@
 import { getHandler } from '@/lib/handlers';
 import { prisma } from '@/lib/db';
 import { env } from '@/lib/env';
+import { HlsSegment } from '@prisma/client';
 
 export const GET = getHandler(async ({ id }: { id: string }) => {
   const stream = await prisma.stream.findFirstOrThrow({
@@ -31,7 +32,7 @@ export const GET = getHandler(async ({ id }: { id: string }) => {
   // resp.push('#EXT-X-DISCONTINUITY-SEQUENCE:0');
   resp.push('#EXT-X-PLAYLIST-TYPE:EVENT');
   const entries = stream.HlsSegment.map(
-    (segment) =>
+    (segment: HlsSegment) =>
       `#EXTINF:${segment.duration},\n${env.HLS_SEGMENTS_URL}/${stream.fixtureId}/${segment.filename}`
   );
 
