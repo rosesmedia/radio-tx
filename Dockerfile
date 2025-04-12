@@ -1,48 +1,28 @@
 # syntax=docker.io/docker/dockerfile:1
 
-# thanks https://github.com/rosesmedia/signups/blob/main/Dockerfile lol
+# thanks https://github.com/rosesmedia/scheduler/blob/main/Dockerfile
 
-FROM node:22-alpine AS base
-RUN corepack enable
+FROM node:22-bookworm-slim AS base
+RUN apt-get update -y && apt-get install -y ca-certificates git openssl && \
+  corepack enable
 
-# 1. Install dependencies only when needed
-FROM base AS deps
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk add --no-cache libc6-compat
-
+FROM base AS build
 WORKDIR /app
-
-# Install dependencies based on the preferred package manager
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* .npmrc* .yarnrc.yml ./
-RUN yarn --immutable --inline-builds
-
-# 2. Rebuild the source code only when needed
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-RUN yarn run build
-
-# 3. Production image, copy all the files and run next
-FROM base AS runner
-WORKDIR /app
+# COPY ./.yarn/ .yarn/
+COPY . /app/
+RUN --mount=type=cache,id=roses-scheduler-yarn,target=.yarn/cache yarn install --immutable --inline-builds
 
 ENV NODE_ENV=production
+RUN yarn run build
 
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nextjs -u 1001
-
-COPY --from=builder /app/public ./public
-
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-USER nextjs
-
-EXPOSE 3000
-
-ENV PORT=3000
-
-CMD HOSTNAME="0.0.0.0" node server.js
+FROM base
+COPY --from=build /app/.next/standalone /app
+COPY --from=build /app/public /app/public
+COPY --from=build /app/.next/static /app/.next/static
+# Copy these in so that we can still run Prisma migrations in prod
+COPY --from=build /app/prisma/schema.prisma /app/prisma/schema.prisma
+COPY --from=build /app/prisma/migrations /app/prisma/migrations
+WORKDIR /app
+ENV NODE_ENV=production
+ENV HOSTNAME="0.0.0.0"
+ENTRYPOINT ["node", "server.js"]
