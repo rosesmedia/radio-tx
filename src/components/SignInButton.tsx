@@ -6,7 +6,7 @@ import Link from 'next/link';
 export function SignInButton() {
   return (
     <Button fullWidth component={Link} href="/api/auth/signin">
-      Radio sign-in
+      Radio MCR sign-in
     </Button>
   );
 }

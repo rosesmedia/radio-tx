@@ -1,6 +1,6 @@
 'use client';
 
-import { AppShell, Burger, Group, NavLink } from '@mantine/core';
+import { AppShell, Burger, Center, Group, NavLink, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import Image from 'next/image';
 import rosesLogomarkSmall from '@/assets/Roses_logomark_small.png';
@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { IconHome, IconMicrophone } from '@tabler/icons-react';
 import { usePathname } from 'next/navigation';
 import StreamsIcon from './StreamsIcon';
+import Footer from './Footer';
 
 export default function DashboardShell({
   children,
@@ -75,6 +76,10 @@ export default function DashboardShell({
       </AppShell.Navbar>
 
       <AppShell.Main>{children}</AppShell.Main>
+
+      <AppShell.Footer>
+        <Footer />
+      </AppShell.Footer>
     </AppShell>
   );
 }
