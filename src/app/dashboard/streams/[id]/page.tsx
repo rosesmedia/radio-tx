@@ -33,6 +33,7 @@ export default async function StreamPage({
       {stream.state !== 'Pending' && (
         <StreamPlayer
           streamId={stream.fixtureId}
+          isLive={stream.state === 'Live'}
         />
       )}
 

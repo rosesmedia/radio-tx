@@ -15,13 +15,14 @@ export default async function StreamEmbed({
     },
   });
 
-  if (!stream) {
+  // TODO: maybe a "not live yet" page instead of a 404
+  if (!stream || stream.state === 'Pending') {
     return notFound();
   }
 
   return (
     <Container pt={16}>
-      <StreamPlayer streamId={stream.fixtureId} />
+      <StreamPlayer streamId={stream.fixtureId} isLive={stream.state === 'Live'} />
     </Container>
   );
 }

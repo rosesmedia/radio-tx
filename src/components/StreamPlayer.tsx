@@ -22,6 +22,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface Props {
   streamId: string;
+  isLive: boolean;
 }
 
 const HLS_MIME = 'application/vnd.apple.mpegurl';
@@ -67,7 +68,7 @@ export default function StreamPlayer(props: Props) {
   }
 }
 
-function StreamPlayerInner({ streamId }: Props) {
+function StreamPlayerInner({ streamId, isLive }: Props) {
   const audio = useRef<HTMLAudioElement>(null);
   const [isPaused, setIsPaused] = useState(true);
   const [loading, setLoading] = useState(true);
@@ -137,7 +138,9 @@ function StreamPlayerInner({ streamId }: Props) {
       />
 
       <Group>
-        <Text>{formatTimestamp(currentTime)}</Text>
+        <Text>{formatTimestamp(currentTime)} {(!isLive && !loading) && <>
+          / {formatTimestamp(duration)}
+        </>}</Text>
 
         <Slider
           color="red"
