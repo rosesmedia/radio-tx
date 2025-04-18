@@ -12,10 +12,10 @@
     mode: 0755
   become: true
 
-- name: Install nginx configuration
+- name: Install nginx configuration (stream.radio.roses.media)
   ansible.builtin.template:
-    src: templates/radio.roses.media.conf
-    dest: /etc/nginx/sites-enabled/radio.roses.media.conf
+    src: templates/stream.radio.roses.media.conf
+    dest: /etc/nginx/sites-enabled/stream.radio.roses.media.conf
     owner: root
     group: root
     mode: 0644

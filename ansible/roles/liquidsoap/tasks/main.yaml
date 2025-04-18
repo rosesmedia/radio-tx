@@ -3,16 +3,25 @@
   ansible.builtin.apt:
     deb: https://www.deb-multimedia.org/pool/main/d/deb-multimedia-keyring/deb-multimedia-keyring_2024.9.1_all.deb
   become: true
+  when: ansible_facts['distribution'] == "Debian" # not needed on ubuntu
 - name: Add deb-multimedia repo
   ansible.builtin.apt_repository:
     repo: deb [signed-by=/usr/share/keyrings/deb-multimedia-keyring.pgp] https://www.deb-multimedia.org bookworm main non-free
     filename: dmo
   become: true
+  when: ansible_facts['distribution'] == "Debian" # not needed on ubuntu
 
 - name: Install liquidsoap
   ansible.builtin.apt:
     deb: https://github.com/savonet/liquidsoap/releases/download/v2.3.1/liquidsoap_2.3.1-debian-bookworm-1_amd64.deb
   become: true
+  when: ansible_facts['distribution'] == "Debian"
+
+- name: Install liquidsoap
+  ansible.builtin.apt:
+    deb: https://ury.org.uk/media/liquidsoap_2.3.2-ubuntu-noble-2_amd64.deb
+  become: true
+  when: ansible_facts['distribution'] == "Ubuntu"
 
 - name: Install required dependencies
   ansible.builtin.apt:
