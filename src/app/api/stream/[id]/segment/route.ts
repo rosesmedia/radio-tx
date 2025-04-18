@@ -2,6 +2,7 @@ import { postHandler } from '@/lib/handlers';
 import { prisma } from '@/lib/db';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
+import { env } from '@/lib/env';
 
 const newSegmentSchema = z.object({
   index: z.number(),
@@ -28,5 +29,8 @@ export const POST = postHandler(
     });
 
     return NextResponse.json(newSegment);
+  },
+  {
+    requireAuthentication: { token: env.STREAM_CONTROLLER_TOKEN!, },
   }
 );

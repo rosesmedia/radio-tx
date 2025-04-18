@@ -19,6 +19,7 @@ const envSchema = z.object({
       'STREAM_CONTROLLER_URL most not end with a `/`'
     )
     .optional(),
+  STREAM_CONTROLLER_TOKEN: z.string(),
   DASHBOARD_USER: z.string(),
   DASHBOARD_PASS: z.string(),
 });

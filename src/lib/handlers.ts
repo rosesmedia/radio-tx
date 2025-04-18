@@ -1,7 +1,7 @@
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { internalServerError, notFound } from './responses';
+import { internalServerError, notFound, unauthorized } from './responses';
 
 async function wrapHandler(
   handler: () => Promise<Response>
@@ -30,15 +30,26 @@ export function getHandler<Params>(
   };
 }
 
+export interface PostHandlerOptions {
+  requireAuthentication?: { token: string; };
+}
+
 export function postHandler<Params, Body>(
   schema: z.ZodSchema<Body>,
-  handler: (p: Params, body: Body) => Promise<Response>
+  handler: (p: Params, body: Body) => Promise<Response>,
+  options?: PostHandlerOptions,
 ): (
   req: Request,
   { params }: { params: Promise<Params> }
 ) => Promise<Response> {
   return async (req, { params: p }) => {
     const params = await p;
+    const requireToken = options?.requireAuthentication?.token;
+    if (requireToken) {
+      const authHeader = req.headers.get('Authorization');
+      if (!authHeader) return unauthorized();
+      if (authHeader !== `Bearer ${requireToken}`) return unauthorized();
+    }
     const data = await req.json();
     const parseResult = schema.safeParse(data);
     if (parseResult.success) {

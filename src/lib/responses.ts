@@ -11,3 +11,7 @@ export function internalServerError() {
 export function badRequest() {
   return NextResponse.json({ error: 'Bad request' }, { status: 400 });
 }
+
+export function unauthorized() {
+  return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+}

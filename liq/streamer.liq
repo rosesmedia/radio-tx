@@ -16,6 +16,7 @@ end
 
 stream_id = get_env("STREAM_ID")
 api_base = get_env("STREAM_API_BASE")
+api_token = get_env("STREAM_API_TOKEN")
 
 def notify_ready() =
   # the endpoint doesn't need any request body values, but liquidsoap json.stringify serialises {} as an empty array
@@ -23,7 +24,10 @@ def notify_ready() =
     data = json.stringify({
       ready = true,
     }),
-    headers = [("Content-Type", "application/json; charset=UTF-8")],
+    headers = [
+      ("Content-Type", "application/json; charset=UTF-8"),
+      ("Authorization", "Bearer #{api_token}")
+    ],
     "#{api_base}/api/stream/#{stream_id}/ready"
   ))
 end
@@ -57,7 +61,10 @@ def segment_name(metadata) =
       filename = filename,
       duration = duration,
     }),
-    headers = [("Content-Type", "application/json; charset=UTF-8")],
+    headers = [
+      ("Content-Type", "application/json; charset=UTF-8"),
+      ("Authorization", "Bearer #{api_token}")
+    ],
     "#{api_base}/api/stream/#{stream_id}/segment"
   ))
   filename
@@ -72,7 +79,10 @@ def segment_changed(~state, filename) =
         filename = path.basename(filename),
         ready = true,
       }),
-      headers = [("Content-Type", "application/json; charset=UTF-8")],
+      headers = [
+        ("Content-Type", "application/json; charset=UTF-8"),
+        ("Authorization", "Bearer #{api_token}")
+      ],
       "#{api_base}/api/stream/#{stream_id}/segment/ready",
     ))
   end

@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/db';
+import { env } from '@/lib/env';
 import { postHandler } from '@/lib/handlers';
 import { badRequest } from '@/lib/responses';
 import { notifyStreamStarted } from '@/lib/stream-controller';
@@ -32,4 +33,6 @@ export const POST = postHandler(readySchema, async ({ id }: { id: string }) => {
   return NextResponse.json({
     ok: true,
   });
+}, {
+  requireAuthentication: { token: env.STREAM_CONTROLLER_TOKEN!, },
 });
