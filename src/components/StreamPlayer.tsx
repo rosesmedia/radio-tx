@@ -49,7 +49,7 @@ export default function StreamPlayer(props: Props) {
   if (supported === null) {
     return (
       <Center>
-        <Loader color='red' />
+        <Loader color="red" />
       </Center>
     );
   } else if (supported) {
@@ -138,9 +138,10 @@ function StreamPlayerInner({ streamId, isLive }: Props) {
       />
 
       <Group>
-        <Text>{formatTimestamp(currentTime)} {(!isLive && !loading) && <>
-          / {formatTimestamp(duration)}
-        </>}</Text>
+        <Text>
+          {formatTimestamp(currentTime)}{' '}
+          {!isLive && !loading && <>/ {formatTimestamp(duration)}</>}
+        </Text>
 
         <Slider
           color="red"

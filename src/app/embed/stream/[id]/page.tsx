@@ -22,7 +22,10 @@ export default async function StreamEmbed({
 
   return (
     <Container pt={16}>
-      <StreamPlayer streamId={stream.fixtureId} isLive={stream.state === 'Live'} />
+      <StreamPlayer
+        streamId={stream.fixtureId}
+        isLive={stream.state === 'Live'}
+      />
     </Container>
   );
 }

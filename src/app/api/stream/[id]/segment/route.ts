@@ -31,6 +31,6 @@ export const POST = postHandler(
     return NextResponse.json(newSegment);
   },
   {
-    requireAuthentication: { token: env.STREAM_CONTROLLER_TOKEN!, },
+    requireAuthentication: { token: env.STREAM_CONTROLLER_TOKEN! },
   }
 );

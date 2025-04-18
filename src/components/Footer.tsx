@@ -2,7 +2,7 @@ import { Center, Text } from '@mantine/core';
 import Link from 'next/link';
 
 interface Props {
-    mt?: number;
+  mt?: number;
 }
 
 export default function Footer(props: Props) {

@@ -25,6 +25,6 @@ export const POST = postHandler(
     return NextResponse.json(result);
   },
   {
-    requireAuthentication: { token: env.STREAM_CONTROLLER_TOKEN!, },
+    requireAuthentication: { token: env.STREAM_CONTROLLER_TOKEN! },
   }
 );

@@ -31,13 +31,13 @@ export function getHandler<Params>(
 }
 
 export interface PostHandlerOptions {
-  requireAuthentication?: { token: string; };
+  requireAuthentication?: { token: string };
 }
 
 export function postHandler<Params, Body>(
   schema: z.ZodSchema<Body>,
   handler: (p: Params, body: Body) => Promise<Response>,
-  options?: PostHandlerOptions,
+  options?: PostHandlerOptions
 ): (
   req: Request,
   { params }: { params: Promise<Params> }
@@ -55,12 +55,15 @@ export function postHandler<Params, Body>(
     if (parseResult.success) {
       return await wrapHandler(() => handler(params, parseResult.data));
     } else {
-      return NextResponse.json({
-        error: 'Bad request',
-        issues: parseResult.error.issues,
-      }, {
-        status: 400,
-      });
+      return NextResponse.json(
+        {
+          error: 'Bad request',
+          issues: parseResult.error.issues,
+        },
+        {
+          status: 400,
+        }
+      );
     }
   };
 }
