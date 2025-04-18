@@ -1,0 +1,13 @@
+# {{ ansible_managed }}
+[Unit]
+Description=Stream control helper API
+
+[Service]
+Type=simple
+ExecStart=/opt/radio-tx/stream-controller
+EnvironmentFile=/etc/streaming.env
+User=streaming
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,5 @@
+streaming:
+  hosts:
+    uryrosesstream0:
+      ansible_host: uryrosesstream0
+      ansible_user: deploy
