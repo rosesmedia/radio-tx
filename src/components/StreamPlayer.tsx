@@ -68,6 +68,13 @@ export default function StreamPlayer(props: Props) {
   }
 }
 
+function logEvent<T>(event: string, action?: (t: T) => void): (t: T) => void {
+  return (t) => {
+    console.log(`[player] [event] ${event}`);
+    if (action) action(t);
+  };
+}
+
 function StreamPlayerInner({ streamId, isLive }: Props) {
   const audio = useRef<HTMLAudioElement>(null);
   const [isPaused, setIsPaused] = useState(true);
@@ -80,8 +87,10 @@ function StreamPlayerInner({ streamId, isLive }: Props) {
   useEffect(() => {
     if (!audio.current) return;
     if (audio.current.canPlayType(HLS_MIME)) {
+      console.log('[player] using browser built-in HLS');
       audio.current.src = streamUrl;
     } else if (Hls.isSupported()) {
+      console.log('[player] using hls.js');
       const hls = new Hls({
         // we need to use the worker to avoid this until we can fix the liquidsoap script
         // https://github.com/savonet/liquidsoap/issues/4398
@@ -128,13 +137,20 @@ function StreamPlayerInner({ streamId, isLive }: Props) {
     <Stack>
       <audio
         ref={audio}
-        onPlay={() => setIsPaused(false)}
-        onPause={() => setIsPaused(true)}
-        onStalled={() => setLoading(true)}
-        onPlaying={() => setLoading(false)}
-        onCanPlay={() => setLoading(false)}
-        onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
-        onDurationChange={(e) => setDuration(e.currentTarget.duration)}
+        onPlay={logEvent('onPlay', () => setIsPaused(false))}
+        onPause={logEvent('onPause', () => setIsPaused(true))}
+        // safari iOS seems to send the onWaiting event when the stream is still playing, so we make sure we aren't been lied to
+        onStalled={logEvent('onWaiting', (e) => setLoading(e.currentTarget.readyState < HTMLMediaElement.HAVE_FUTURE_DATA))}
+        onPlaying={logEvent('onPlaying', () => setLoading(false))}
+        onCanPlay={logEvent('onCanPlay', () => setLoading(false))}
+        onTimeUpdate={logEvent('onTimeUpdate', (e) => setCurrentTime(e.currentTarget.currentTime))}
+        onDurationChange={logEvent('onDurationChange', (e) => setDuration(e.currentTarget.duration))}
+        onLoadedMetadata={logEvent('onLoadedMetadata', () => setLoading(false))}
+        onLoadedData={logEvent('onLoadedData', (e) => {
+          if (e.currentTarget.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) {
+            setLoading(false);
+          }
+        })}
       />
 
       <Group>
