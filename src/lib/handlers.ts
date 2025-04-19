@@ -1,5 +1,5 @@
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { internalServerError, notFound, unauthorized } from './responses';
 
@@ -33,10 +33,10 @@ function checkAuth(req: Request, options?: HandlerOptions): boolean {
 }
 
 export function getHandler<Params>(
-  handler: (p: Params) => Promise<Response>,
+  handler: (p: Params, req: NextRequest) => Promise<Response>,
   options?: HandlerOptions,
 ): (
-  req: Request,
+  req: NextRequest,
   { params }: { params: Promise<Params> }
 ) => Promise<Response> {
   return async (req, { params: p }) => {
@@ -44,7 +44,7 @@ export function getHandler<Params>(
       return unauthorized();
     }
     const params = await p;
-    return await wrapHandler(() => handler(params));
+    return await wrapHandler(() => handler(params, req));
   };
 }
 
