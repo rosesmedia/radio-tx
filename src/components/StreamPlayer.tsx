@@ -68,10 +68,10 @@ export default function StreamPlayer(props: Props) {
   }
 }
 
-function logEvent<T>(event: string, action: (t: T) => void): (t: T) => void {
+function logEvent<T>(event: string, action?: (t: T) => void): (t: T) => void {
   return (t) => {
     console.log(`[player] [event] ${event}`);
-    action(t);
+    if (action) action(t);
   };
 }
 
@@ -139,13 +139,20 @@ function StreamPlayerInner({ streamId, isLive }: Props) {
         ref={audio}
         onPlay={logEvent('onPlay', () => setIsPaused(false))}
         onPause={logEvent('onPause', () => setIsPaused(true))}
-        onStalled={logEvent('onStalled', () => setLoading(true))}
+        // safari iOS seems to send the onWaiting event when the stream is still playing, so we make sure we aren't been lied to
+        onStalled={logEvent('onWaiting', (e) => setLoading(e.currentTarget.readyState < HTMLMediaElement.HAVE_FUTURE_DATA))}
         onPlaying={logEvent('onPlaying', () => setLoading(false))}
         onCanPlay={logEvent('onCanPlay', () => setLoading(false))}
         onTimeUpdate={logEvent('onTimeUpdate', (e) => setCurrentTime(e.currentTarget.currentTime))}
         onDurationChange={logEvent('onDurationChange', (e) => setDuration(e.currentTarget.duration))}
+        onLoadedMetadata={logEvent('onLoadedMetadata', () => setLoading(false))}
+        onLoadedData={logEvent('onLoadedData', (e) => {
+          if (e.currentTarget.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) {
+            setLoading(false);
+          }
+        })}
       />
-
+{/* can you push this to the branch */}
       <Group>
         <Text>
           {formatTimestamp(currentTime)}{' '}
