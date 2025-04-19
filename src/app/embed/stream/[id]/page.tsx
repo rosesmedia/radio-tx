@@ -21,7 +21,7 @@ export default async function StreamEmbed({
   }
 
   return (
-    <Container pt={16}>
+    <Container pt={40}>
       <StreamPlayer
         streamId={stream.fixtureId}
         isLive={stream.state === 'Live'}
