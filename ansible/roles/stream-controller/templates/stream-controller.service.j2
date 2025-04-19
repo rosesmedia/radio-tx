@@ -5,6 +5,8 @@ Description=Stream control helper API
 [Service]
 Type=simple
 ExecStart=/opt/radio-tx/stream-controller
+Environment=HOST=0.0.0.0
+Environment=PORT=1350
 EnvironmentFile=/etc/streaming.env
 User=streaming
 Restart=on-failure

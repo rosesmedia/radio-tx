@@ -18,37 +18,48 @@ async function wrapHandler(
   }
 }
 
+export interface HandlerOptions {
+  requireAuthentication?: { token: string };
+}
+
+function checkAuth(req: Request, options?: HandlerOptions): boolean {
+  const requireToken = options?.requireAuthentication?.token;
+  if (requireToken) {
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) return false;
+    if (authHeader !== `Bearer ${requireToken}`) return false;
+  }
+  return true;
+}
+
 export function getHandler<Params>(
-  handler: (p: Params) => Promise<Response>
+  handler: (p: Params) => Promise<Response>,
+  options?: HandlerOptions,
 ): (
   req: Request,
   { params }: { params: Promise<Params> }
 ) => Promise<Response> {
   return async (req, { params: p }) => {
+    if (!checkAuth(req, options)) {
+      return unauthorized();
+    }
     const params = await p;
     return await wrapHandler(() => handler(params));
   };
 }
 
-export interface PostHandlerOptions {
-  requireAuthentication?: { token: string };
-}
-
 export function postHandler<Params, Body>(
   schema: z.ZodSchema<Body>,
   handler: (p: Params, body: Body) => Promise<Response>,
-  options?: PostHandlerOptions
+  options?: HandlerOptions
 ): (
   req: Request,
   { params }: { params: Promise<Params> }
 ) => Promise<Response> {
   return async (req, { params: p }) => {
     const params = await p;
-    const requireToken = options?.requireAuthentication?.token;
-    if (requireToken) {
-      const authHeader = req.headers.get('Authorization');
-      if (!authHeader) return unauthorized();
-      if (authHeader !== `Bearer ${requireToken}`) return unauthorized();
+    if (!checkAuth(req, options)) {
+      return unauthorized();
     }
     const data = await req.json();
     const parseResult = schema.safeParse(data);

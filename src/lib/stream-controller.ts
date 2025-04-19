@@ -17,6 +17,7 @@ async function sendRequest(path: string): Promise<void> {
     method: 'POST',
     headers: {
       'User-Agent': USER_AGENT,
+      'Authorization': `Bearer ${env.STREAM_CONTROLLER_TOKEN}`,
     },
   });
   if (!res.ok) {

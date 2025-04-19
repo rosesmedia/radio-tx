@@ -7,7 +7,7 @@ if [ $# -ne 1 ]; then
     exit 1
 fi
 
-ingest_point=$(curl --silent --fail "$STREAM_API_BASE/api/ingest/$1")
+ingest_point=$(curl --silent --fail -H "Authorization: Bearer $STREAM_API_TOKEN" "$STREAM_API_BASE/api/ingest/$1")
 
 INGEST_ID=$(echo "$ingest_point" | jq --raw-output .id)
 ICECAST_SERVER=$(echo "$ingest_point" | jq --raw-output .icecastServer)
