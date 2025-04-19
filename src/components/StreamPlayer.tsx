@@ -152,7 +152,7 @@ function StreamPlayerInner({ streamId, isLive }: Props) {
           }
         })}
       />
-{/* can you push this to the branch */}
+
       <Group>
         <Text>
           {formatTimestamp(currentTime)}{' '}
