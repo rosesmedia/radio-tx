@@ -1,10 +1,9 @@
-import { prisma } from "@/lib/db";
-import { env } from "@/lib/env";
-import { getHandler } from "@/lib/handlers";
-import { badRequest } from "@/lib/responses";
-import { toStreamInfo } from "@/lib/stream";
-import { Stream } from "@prisma/client";
-import { NextResponse } from "next/server";
+import { prisma } from '@/lib/db';
+import { getHandler } from '@/lib/handlers';
+import { badRequest } from '@/lib/responses';
+import { toStreamInfo } from '@/lib/stream';
+import { Stream } from '@prisma/client';
+import { NextResponse } from 'next/server';
 
 export const GET = getHandler(async (_: undefined, req) => {
   const state = req.nextUrl.searchParams.get('state');
@@ -27,6 +26,6 @@ export const GET = getHandler(async (_: undefined, req) => {
   }
 
   return NextResponse.json({
-    streams: streams.map(toStreamInfo)
+    streams: streams.map(toStreamInfo),
   });
 });

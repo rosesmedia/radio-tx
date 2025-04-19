@@ -34,7 +34,7 @@ function checkAuth(req: Request, options?: HandlerOptions): boolean {
 
 export function getHandler<Params>(
   handler: (p: Params, req: NextRequest) => Promise<Response>,
-  options?: HandlerOptions,
+  options?: HandlerOptions
 ): (
   req: NextRequest,
   { params }: { params: Promise<Params> }
