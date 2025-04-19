@@ -24,11 +24,11 @@ yarn dev
 ## Architecture
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="/docs/roses_radio_tx_v1.4_dark.png">
-  <img alt="architecture diagram" src="/docs/roses_radio_tx_v1.4.png">
+  <source media="(prefers-color-scheme: dark)" srcset="/docs/roses_radio_tx_v1.5_dark.png">
+  <img alt="architecture diagram" src="/docs/roses_radio_tx_v1.5.png">
 </picture>
 
-[Click here if the image is too small](/docs/roses_radio_tx_v1.4.png)
+[Click here if the image is too small](/docs/roses_radio_tx_v1.5.png)
 
 ### Components
 
