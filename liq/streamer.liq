@@ -39,11 +39,10 @@ aac_high =
     format = "mpegts",
     interleaved = false,
     %audio(
-      codec = "libfdk_aac",
+      codec = "aac",
       channels = 2,
       ar = 48000,
       b = "192k",
-      afterburner = 1,
       profile = "aac_low"
     )
   )
