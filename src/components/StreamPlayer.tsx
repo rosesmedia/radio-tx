@@ -192,7 +192,7 @@ function StreamPlayerInner({ streamId, isLive }: Props) {
           size={64}
           aria-label={audio?.current?.paused === false ? 'play' : 'pause'}
           onClick={() => togglePause()}
-          // disabled={loading}
+          disabled={loading}
         >
           {loading ? (
             <Loader color="white" />
