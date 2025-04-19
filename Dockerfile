@@ -13,6 +13,8 @@ COPY . /app/
 RUN --mount=type=cache,id=roses-scheduler-yarn,target=.yarn/cache yarn install --immutable --inline-builds
 
 ENV NODE_ENV=production
+ARG GIT_REV
+ENV GIT_REV=$GIT_REV
 RUN SKIP_ENV_VALIDATION=1 PUBLIC_URL="http://localhost:3000" yarn run build
 
 FROM base
