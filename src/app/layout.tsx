@@ -1,5 +1,7 @@
 import {
   ColorSchemeScript,
+  createTheme,
+  MantineColorsTuple,
   mantineHtmlProps,
   MantineProvider,
 } from '@mantine/core';
@@ -9,8 +11,27 @@ import './global.css';
 
 export const metadata = {
   title: 'Roses Radio',
-  description: 'I make the sounds',
+  description: 'I broadcast the sounds',
 };
+
+const rosesRed: MantineColorsTuple = [
+  '#ffebe8',
+  '#ffd6d2',
+  '#f8aca4',
+  '#f27f72',
+  '#ed5948',
+  '#ea402d',
+  '#ea331f',
+  '#d02513',
+  '#ba1e0f',
+  '#a31208'
+];
+
+const theme = createTheme({
+  colors: {
+    rosesRed,
+  }
+});
 
 export default function RootLayout({
   children,
@@ -23,7 +44,7 @@ export default function RootLayout({
         <ColorSchemeScript />
       </head>
       <body>
-        <MantineProvider>{children}</MantineProvider>
+        <MantineProvider theme={theme}>{children}</MantineProvider>
       </body>
     </html>
   );

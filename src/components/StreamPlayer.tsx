@@ -9,6 +9,7 @@ import {
   Slider,
   Stack,
   Text,
+  useMantineTheme,
 } from '@mantine/core';
 import {
   IconAlertSquareRounded,
@@ -76,6 +77,8 @@ function logEvent<T>(event: string, action?: (t: T) => void): (t: T) => void {
 }
 
 function StreamPlayerInner({ streamId, isLive }: Props) {
+  const theme = useMantineTheme();
+
   const audio = useRef<HTMLAudioElement>(null);
   const [isPaused, setIsPaused] = useState(true);
   const [loading, setLoading] = useState(true);
@@ -160,7 +163,7 @@ function StreamPlayerInner({ streamId, isLive }: Props) {
         </Text>
 
         <Slider
-          color="red"
+          color="rosesRed"
           flex={1}
           min={0}
           max={duration}
@@ -184,11 +187,11 @@ function StreamPlayerInner({ streamId, isLive }: Props) {
           disabled={loading}
           onClick={() => skipBackward10()}
         >
-          <IconRewindBackward10 size={32} color="red" />
+          <IconRewindBackward10 size={32} color={theme.colors.rosesRed[6]} />
         </ActionIcon>
 
         <ActionIcon
-          color="red"
+          color="rosesRed"
           size={64}
           aria-label={audio?.current?.paused === false ? 'play' : 'pause'}
           onClick={() => togglePause()}
@@ -210,7 +213,7 @@ function StreamPlayerInner({ streamId, isLive }: Props) {
           disabled={loading}
           onClick={() => skipForward10()}
         >
-          <IconRewindForward10 size={32} color="red" />
+          <IconRewindForward10 size={32} color={theme.colors.rosesRed[6]} />
         </ActionIcon>
       </Group>
     </Stack>
