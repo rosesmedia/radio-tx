@@ -9,9 +9,8 @@ export default function Footer(props: Props) {
   return (
     <Center>
       <Text {...props} p={8}>
-        <Link href="https://github.com/rosesmedia/radio-tx">radio-tx</Link> by
-        the <Link href="mailto:computing@ury.org.uk">URY Computing Team</Link>.
-        Version{' '}
+        <Link href="https://github.com/rosesmedia/radio-tx">radio-tx</Link>{' '}
+        version{' '}
         <Link
           href={
             process.env.NEXT_PUBLIC_GIT_COMMIT
@@ -21,7 +20,11 @@ export default function Footer(props: Props) {
         >
           {process.env.NEXT_PUBLIC_GIT_COMMIT?.substring(0, 7)}
         </Link>
-        .
+        . Built by the{' '}
+        <Link href="mailto:computing@ury.org.uk">URY Computing Team</Link>.{' '}
+        <Link href="https://www.york.ac.uk/about/legal-statements/">
+          Disclaimer
+        </Link>
       </Text>
     </Center>
   );
