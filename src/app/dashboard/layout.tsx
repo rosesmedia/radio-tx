@@ -13,7 +13,7 @@ export default async function DashboardLayout({
 }) {
   const u = await getServerSession();
   if (!u) {
-    redirect('/api/auth/login');
+    redirect('/api/auth/signin');
   }
 
   const isAnyStreamLive =
