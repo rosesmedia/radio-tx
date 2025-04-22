@@ -1,16 +1,9 @@
 'use client';
 
-import {
-  Button,
-  ButtonProps,
-  Group,
-  PolymorphicComponentProps,
-  Text,
-} from '@mantine/core';
+import { Button, Group, Text } from '@mantine/core';
 import { startTransition, useActionState } from 'react';
 import { deleteIngestPoint } from './actions';
 import { resultMessage } from '@/lib/form-types';
-import { useRouter } from 'next/navigation';
 
 export function DeleteButton({ id }: { id: string }) {
   const [state, action, pending] = useActionState(
@@ -36,23 +29,5 @@ export function DeleteButton({ id }: { id: string }) {
         </Button>
       </Group>
     </>
-  );
-}
-
-export function EditButton({
-  id,
-  ...props
-}: { id: string } & Omit<
-  PolymorphicComponentProps<'button', ButtonProps>,
-  'onClick'
->) {
-  const router = useRouter();
-  return (
-    <Button
-      onClick={() => router.push(`/dashboard/ingest/${id}/edit`)}
-      {...props}
-    >
-      Edit
-    </Button>
   );
 }

@@ -2,7 +2,8 @@ import StreamPlayer from '@/components/StreamPlayer';
 import { prisma } from '@/lib/db';
 import { Button, Group, Title } from '@mantine/core';
 import { notFound } from 'next/navigation';
-import { EditButton, EndStreamButton, GoLiveButton } from './components';
+import { EndStreamButton, GoLiveButton } from './components';
+import Link from 'next/link';
 
 export default async function StreamPage({
   params,
@@ -24,7 +25,14 @@ export default async function StreamPage({
     <>
       <Group>
         <Title order={1}>{stream.name}</Title>
-        <EditButton id={fixtureId} ml={'auto'} />
+        <Link
+          href={`/dashboard/streams/${fixtureId}/edit`}
+          style={{
+            marginLeft: 'auto',
+          }}
+        >
+          <Button>Edit</Button>
+        </Link>
       </Group>
 
       <Group>

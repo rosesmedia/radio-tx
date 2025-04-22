@@ -4,14 +4,7 @@ import { startTransition, useActionState } from 'react';
 import { endStream, startStream } from './actions';
 import { notifications } from '@mantine/notifications';
 import { resultMessage } from '@/lib/form-types';
-import {
-  Button,
-  ButtonProps,
-  PolymorphicComponentProps,
-  Stack,
-  Text,
-} from '@mantine/core';
-import { useRouter } from 'next/navigation';
+import { Button, Stack, Text } from '@mantine/core';
 
 export function GoLiveButton({ id }: { id: string }) {
   const [state, action, pending] = useActionState(
@@ -70,23 +63,5 @@ export function EndStreamButton({ id }: { id: string }) {
         End stream
       </Button>
     </Stack>
-  );
-}
-
-export function EditButton({
-  id,
-  ...props
-}: { id: string } & Omit<
-  PolymorphicComponentProps<'button', ButtonProps>,
-  'onClick'
->) {
-  const router = useRouter();
-  return (
-    <Button
-      onClick={() => router.push(`/dashboard/streams/${id}/edit`)}
-      {...props}
-    >
-      Edit
-    </Button>
   );
 }

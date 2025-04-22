@@ -1,7 +1,8 @@
 import { prisma } from '@/lib/db';
-import { Group, Space, Text, Title } from '@mantine/core';
+import { Button, Group, Space, Text, Title } from '@mantine/core';
 import { notFound } from 'next/navigation';
-import { DeleteButton, EditButton } from './components';
+import { DeleteButton } from './components';
+import Link from 'next/link';
 
 export default async function StreamPage({
   params,
@@ -23,7 +24,14 @@ export default async function StreamPage({
     <>
       <Group>
         <Title order={1}>{ingest.name}</Title>
-        <EditButton id={id} ml={'auto'} />
+        <Link
+          href={`/dashboard/ingest/${id}/edit`}
+          style={{
+            marginLeft: 'auto',
+          }}
+        >
+          <Button>Edit</Button>
+        </Link>
       </Group>
 
       <Space h="md" />
