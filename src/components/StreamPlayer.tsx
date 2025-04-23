@@ -9,12 +9,14 @@ import {
   Slider,
   Stack,
   Text,
-  useMantineTheme,
+  Tooltip,
 } from '@mantine/core';
 import {
   IconAlertSquareRounded,
   IconPlayerPause,
   IconPlayerPlay,
+  IconPlayerSkipBack,
+  IconPlayerSkipForward,
   IconRewindBackward10,
   IconRewindForward10,
 } from '@tabler/icons-react';
@@ -77,8 +79,6 @@ function logEvent<T>(event: string, action?: (t: T) => void): (t: T) => void {
 }
 
 function StreamPlayerInner({ streamId, isLive }: Props) {
-  const theme = useMantineTheme();
-
   const audio = useRef<HTMLAudioElement>(null);
   const [isPaused, setIsPaused] = useState(true);
   const [loading, setLoading] = useState(true);
@@ -124,16 +124,28 @@ function StreamPlayerInner({ streamId, isLive }: Props) {
     }
   }, [audio, loading]);
 
-  const skipForward10 = useCallback(() => {
+  const skipBackToStart = useCallback(() => {
     if (!audio.current) return;
     if (loading) return;
-    audio.current.currentTime = audio.current.currentTime + 10;
+    audio.current.currentTime = 0;
   }, [audio, loading]);
 
   const skipBackward10 = useCallback(() => {
     if (!audio.current) return;
     if (loading) return;
     audio.current.currentTime = audio.current.currentTime - 10;
+  }, [audio, loading]);
+
+  const skipForward10 = useCallback(() => {
+    if (!audio.current) return;
+    if (loading) return;
+    audio.current.currentTime = audio.current.currentTime + 10;
+  }, [audio, loading]);
+
+  const skipForwardToLive = useCallback(() => {
+    if (!audio.current) return;
+    if (loading) return;
+    audio.current.currentTime = Math.max(0, audio.current.duration - 8);
   }, [audio, loading]);
 
   return (
@@ -163,7 +175,7 @@ function StreamPlayerInner({ streamId, isLive }: Props) {
         </Text>
 
         <Slider
-          color="rosesRed"
+          color="#ea3722"
           flex={1}
           min={0}
           max={duration}
@@ -180,41 +192,71 @@ function StreamPlayerInner({ streamId, isLive }: Props) {
       <br />
 
       <Group justify="center">
-        <ActionIcon
-          variant="transparent"
-          size={48}
-          aria-label="rewind backwards 10 seconds"
-          disabled={loading}
-          onClick={() => skipBackward10()}
-        >
-          <IconRewindBackward10 size={32} color={theme.colors.rosesRed[6]} />
-        </ActionIcon>
+        {isLive && <Tooltip label='Rewind to start'>
+          <ActionIcon
+            color='#ea3722'
+            size={42}
+            aria-label="Rewind to start"
+            disabled={loading}
+            onClick={() => skipBackToStart()}
+          >
+            <IconPlayerSkipBack size={24} color='white' />
+          </ActionIcon>
+        </Tooltip>}
 
-        <ActionIcon
-          color="rosesRed"
-          size={64}
-          aria-label={audio?.current?.paused === false ? 'play' : 'pause'}
-          onClick={() => togglePause()}
-          disabled={loading}
-        >
-          {loading ? (
-            <Loader color="white" />
-          ) : isPaused ? (
-            <IconPlayerPlay size={48} />
-          ) : (
-            <IconPlayerPause size={48} />
-          )}
-        </ActionIcon>
+        <Tooltip label='Rewind 10 seconds'>
+          <ActionIcon
+            color='#ea3722'
+            size={48}
+            aria-label="Rewind 10 seconds"
+            disabled={loading}
+            onClick={() => skipBackward10()}
+          >
+            <IconRewindBackward10 size={32} color='white' />
+          </ActionIcon>
+        </Tooltip>
 
-        <ActionIcon
-          variant="transparent"
-          size={48}
-          aria-label="skip forwards 10 seconds"
-          disabled={loading}
-          onClick={() => skipForward10()}
-        >
-          <IconRewindForward10 size={32} color={theme.colors.rosesRed[6]} />
-        </ActionIcon>
+        <Tooltip label={isPaused ? 'Pause' : 'Play'}>
+          <ActionIcon
+            color="#ea3722"
+            size={64}
+            aria-label={audio?.current?.paused === false ? 'play' : 'pause'}
+            onClick={() => togglePause()}
+            disabled={loading}
+          >
+            {loading ? (
+              <Loader color="white" />
+            ) : isPaused ? (
+              <IconPlayerPlay size={48} />
+            ) : (
+              <IconPlayerPause size={48} />
+            )}
+          </ActionIcon>
+        </Tooltip>
+
+        <Tooltip label='Skip 10 seconds'>
+          <ActionIcon
+            color="#ea3722"
+            size={48}
+            aria-label="Skip forward 10 seconds"
+            disabled={loading}
+            onClick={() => skipForward10()}
+          >
+            <IconRewindForward10 size={32} color='white' />
+          </ActionIcon>
+        </Tooltip>
+
+        {isLive && <Tooltip label='Skip to live'>
+          <ActionIcon
+            color='#ea3722'
+            size={42}
+            aria-label="Skip to live"
+            disabled={loading}
+            onClick={() => skipForwardToLive()}
+          >
+            <IconPlayerSkipForward size={24} color='white' />
+          </ActionIcon>
+        </Tooltip>}
       </Group>
     </Stack>
   );

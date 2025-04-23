@@ -3,6 +3,8 @@ import { prisma } from '@/lib/db';
 import { Container } from '@mantine/core';
 import { notFound } from 'next/navigation';
 
+import './style.css';
+
 export default async function StreamEmbed({
   params,
 }: {
