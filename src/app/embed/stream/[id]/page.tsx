@@ -21,11 +21,13 @@ export default async function StreamEmbed({
   }
 
   return (
-    <Container pt={40}>
-      <StreamPlayer
-        streamId={stream.fixtureId}
-        isLive={stream.state === 'Live'}
-      />
-    </Container>
+    <div style={{ backgroundColor: '#f8f8f8' }}>
+      <Container pt={40}>
+        <StreamPlayer
+          streamId={stream.fixtureId}
+          isLive={stream.state === 'Live'}
+        />
+      </Container>
+    </div>
   );
 }

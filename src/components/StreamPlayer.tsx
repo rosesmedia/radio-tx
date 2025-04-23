@@ -186,23 +186,25 @@ function StreamPlayerInner({ streamId, isLive }: Props) {
           aria-label="rewind backwards 10 seconds"
           disabled={loading}
           onClick={() => skipBackward10()}
+          style={{ backgroundColor: '#ea3722' }}
         >
-          <IconRewindBackward10 size={32} color={theme.colors.rosesRed[6]} />
+          <IconRewindBackward10 size={32} color="#ffffff" />
         </ActionIcon>
 
         <ActionIcon
-          color="rosesRed"
+          color="#ffffff"
           size={64}
           aria-label={audio?.current?.paused === false ? 'play' : 'pause'}
           onClick={() => togglePause()}
           disabled={loading}
+          style={{ backgroundColor: '#ea3722' }}
         >
           {loading ? (
-            <Loader color="white" />
+            <Loader color="#ffffff" />
           ) : isPaused ? (
-            <IconPlayerPlay size={48} />
+            <IconPlayerPlay size={48} color="#ffffff" />
           ) : (
-            <IconPlayerPause size={48} />
+            <IconPlayerPause size={48} color="#ffffff" />
           )}
         </ActionIcon>
 
@@ -212,8 +214,9 @@ function StreamPlayerInner({ streamId, isLive }: Props) {
           aria-label="skip forwards 10 seconds"
           disabled={loading}
           onClick={() => skipForward10()}
+          style={{ backgroundColor: '#ea3722' }}
         >
-          <IconRewindForward10 size={32} color={theme.colors.rosesRed[6]} />
+          <IconRewindForward10 size={32} color='#ffffff' />
         </ActionIcon>
       </Group>
     </Stack>
