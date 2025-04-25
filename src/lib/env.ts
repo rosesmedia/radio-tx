@@ -19,6 +19,15 @@ const envSchema = z.object({
       'STREAM_CONTROLLER_URL most not end with a `/`'
     )
     .optional(),
+  STREAM_SCRIPT_HOST: z
+    .string()
+    .refine(
+      (s) =>
+        !s.endsWith('/') &&
+        !(s.startsWith('http://') || s.startsWith('https://')),
+      'STREAM_SCRIPT_HOST should not be a URL'
+    )
+    .optional(),
   STREAM_CONTROLLER_TOKEN: z.string(),
   DASHBOARD_USER: z.string(),
   DASHBOARD_PASS: z.string(),

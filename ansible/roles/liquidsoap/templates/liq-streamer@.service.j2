@@ -4,7 +4,7 @@ Description=Liquidsoap HLS streamer for stream %i
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/liquidsoap /usr/local/libexec/liquidsoap/streamer.liq
+ExecStart=/usr/local/bin/liq-streamer.sh
 Environment=STREAM_ID=%i
 EnvironmentFile=/etc/streaming.env
 User=streaming

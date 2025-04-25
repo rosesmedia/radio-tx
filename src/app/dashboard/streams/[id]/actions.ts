@@ -1,10 +1,14 @@
 'use server';
 
 import { action } from '@/lib/forms';
-import { startStreamSchema } from './schema';
+import { setSourceSchema, startStreamSchema } from './schema';
 import { prisma } from '@/lib/db';
 import { SafeError } from '@/lib/form-types';
-import { notifyStreamStart, notifyStreamStop } from '@/lib/stream-controller';
+import {
+  notifyStreamStart,
+  notifyStreamStop,
+  setStreamSource,
+} from '@/lib/stream-controller';
 
 export const startStream = action(startStreamSchema, async ({ id }) => {
   const stream = await prisma.stream.findUniqueOrThrow({
@@ -32,4 +36,14 @@ export const endStream = action(startStreamSchema, async ({ id }) => {
   });
 
   await notifyStreamStop(stream.fixtureId);
+});
+
+export const setSource = action(setSourceSchema, async ({ id, source }) => {
+  const stream = await prisma.stream.findUniqueOrThrow({
+    where: { fixtureId: id },
+  });
+
+  await setStreamSource(stream, source);
+
+  return source;
 });

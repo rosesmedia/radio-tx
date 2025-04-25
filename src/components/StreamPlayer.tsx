@@ -155,11 +155,19 @@ function StreamPlayerInner({ streamId, isLive }: Props) {
         onPlay={logEvent('onPlay', () => setIsPaused(false))}
         onPause={logEvent('onPause', () => setIsPaused(true))}
         // safari iOS seems to send the onWaiting event when the stream is still playing, so we make sure we aren't been lied to
-        onStalled={logEvent('onWaiting', (e) => setLoading(e.currentTarget.readyState < HTMLMediaElement.HAVE_FUTURE_DATA))}
+        onStalled={logEvent('onWaiting', (e) =>
+          setLoading(
+            e.currentTarget.readyState < HTMLMediaElement.HAVE_FUTURE_DATA
+          )
+        )}
         onPlaying={logEvent('onPlaying', () => setLoading(false))}
         onCanPlay={logEvent('onCanPlay', () => setLoading(false))}
-        onTimeUpdate={logEvent('onTimeUpdate', (e) => setCurrentTime(e.currentTarget.currentTime))}
-        onDurationChange={logEvent('onDurationChange', (e) => setDuration(e.currentTarget.duration))}
+        onTimeUpdate={logEvent('onTimeUpdate', (e) =>
+          setCurrentTime(e.currentTarget.currentTime)
+        )}
+        onDurationChange={logEvent('onDurationChange', (e) =>
+          setDuration(e.currentTarget.duration)
+        )}
         onLoadedMetadata={logEvent('onLoadedMetadata', () => setLoading(false))}
         onLoadedData={logEvent('onLoadedData', (e) => {
           if (e.currentTarget.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) {
@@ -192,27 +200,29 @@ function StreamPlayerInner({ streamId, isLive }: Props) {
       <br />
 
       <Group justify="center">
-        {isLive && <Tooltip label='Rewind to start'>
-          <ActionIcon
-            color='#ea3722'
-            size={42}
-            aria-label="Rewind to start"
-            disabled={loading}
-            onClick={() => skipBackToStart()}
-          >
-            <IconPlayerSkipBack size={24} color='white' />
-          </ActionIcon>
-        </Tooltip>}
+        {isLive && (
+          <Tooltip label="Rewind to start">
+            <ActionIcon
+              color="#ea3722"
+              size={42}
+              aria-label="Rewind to start"
+              disabled={loading}
+              onClick={() => skipBackToStart()}
+            >
+              <IconPlayerSkipBack size={24} color="white" />
+            </ActionIcon>
+          </Tooltip>
+        )}
 
-        <Tooltip label='Rewind 10 seconds'>
+        <Tooltip label="Rewind 10 seconds">
           <ActionIcon
-            color='#ea3722'
+            color="#ea3722"
             size={48}
             aria-label="Rewind 10 seconds"
             disabled={loading}
             onClick={() => skipBackward10()}
           >
-            <IconRewindBackward10 size={32} color='white' />
+            <IconRewindBackward10 size={32} color="white" />
           </ActionIcon>
         </Tooltip>
 
@@ -234,7 +244,7 @@ function StreamPlayerInner({ streamId, isLive }: Props) {
           </ActionIcon>
         </Tooltip>
 
-        <Tooltip label='Skip 10 seconds'>
+        <Tooltip label="Skip 10 seconds">
           <ActionIcon
             color="#ea3722"
             size={48}
@@ -242,21 +252,23 @@ function StreamPlayerInner({ streamId, isLive }: Props) {
             disabled={loading}
             onClick={() => skipForward10()}
           >
-            <IconRewindForward10 size={32} color='white' />
+            <IconRewindForward10 size={32} color="white" />
           </ActionIcon>
         </Tooltip>
 
-        {isLive && <Tooltip label='Skip to live'>
-          <ActionIcon
-            color='#ea3722'
-            size={42}
-            aria-label="Skip to live"
-            disabled={loading}
-            onClick={() => skipForwardToLive()}
-          >
-            <IconPlayerSkipForward size={24} color='white' />
-          </ActionIcon>
-        </Tooltip>}
+        {isLive && (
+          <Tooltip label="Skip to live">
+            <ActionIcon
+              color="#ea3722"
+              size={42}
+              aria-label="Skip to live"
+              disabled={loading}
+              onClick={() => skipForwardToLive()}
+            >
+              <IconPlayerSkipForward size={24} color="white" />
+            </ActionIcon>
+          </Tooltip>
+        )}
       </Group>
     </Stack>
   );

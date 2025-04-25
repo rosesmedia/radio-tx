@@ -18,6 +18,7 @@ export default async function Home() {
           <Image
             src={rosesLogo}
             alt="the Roses logo, a side profile of a red and white stylised rose"
+            className="hover-spin"
           />
 
           <Title order={1}>

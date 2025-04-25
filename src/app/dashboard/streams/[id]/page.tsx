@@ -2,8 +2,9 @@ import StreamPlayer from '@/components/StreamPlayer';
 import { prisma } from '@/lib/db';
 import { Button, Group, Title } from '@mantine/core';
 import { notFound } from 'next/navigation';
-import { EndStreamButton, GoLiveButton } from './components';
+import { EndStreamButton, GoLiveButton, SourceSelector } from './components';
 import Link from 'next/link';
+import { getStreamSource } from '@/lib/stream-controller';
 
 export default async function StreamPage({
   params,
@@ -19,6 +20,11 @@ export default async function StreamPage({
 
   if (!stream) {
     return notFound();
+  }
+
+  let currentSource: number | null = null;
+  if (stream.state === 'Live') {
+    currentSource = (await getStreamSource(stream)).source;
   }
 
   return (
@@ -51,6 +57,11 @@ export default async function StreamPage({
       {stream.state === 'Live' && (
         <Group>
           <EndStreamButton id={stream.fixtureId} />
+
+          <SourceSelector
+            id={stream.fixtureId}
+            currentSource={currentSource!}
+          />
         </Group>
       )}
     </>

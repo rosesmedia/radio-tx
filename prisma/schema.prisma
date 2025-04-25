@@ -29,6 +29,7 @@ model Stream {
 
   ingestPoint IngestPoint? @relation(fields: [ingestPointId], references: [id])
   ingestPointId String?
+  controlPort Int? @unique
 
   HlsSegment HlsSegment[]
 }

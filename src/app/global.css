@@ -4,3 +4,14 @@
     pointer-events: auto !important;
   }
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  .hover-spin {
+    transition: transform 1000ms ease;
+    transform-origin: center;
+  }
+
+  .hover-spin:hover {
+    transform: rotate(360deg);
+  }
+}
