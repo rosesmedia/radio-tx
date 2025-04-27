@@ -30,6 +30,8 @@ jobs:
           flavor: latest=true
       - name: Build and push
         uses: docker/build-push-action@v6
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         with:
           context: .
           build-args: GIT_REV=${{ github.sha }}
@@ -40,3 +42,5 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           file: Dockerfile
+          secret-envs: |
+            SENTRY_AUTH_TOKEN=SENTRY_AUTH_TOKEN
