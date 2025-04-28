@@ -10,12 +10,12 @@ FROM base AS build
 WORKDIR /app
 # COPY ./.yarn/ .yarn/
 COPY . /app/
-RUN --mount=type=cache,id=roses-scheduler-yarn,target=.yarn/cache yarn install --immutable --inline-builds
+RUN --mount=type=cache,id=radio-tx-yarn,target=.yarn/cache yarn install --immutable --inline-builds
 
 ENV NODE_ENV=production
 ARG GIT_REV
 ENV GIT_REV=$GIT_REV
-RUN SKIP_ENV_VALIDATION=1 PUBLIC_URL="http://localhost:3000" yarn run build
+RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN,env=SENTRY_AUTH_TOKEN SKIP_ENV_VALIDATION=1 PUBLIC_URL="http://localhost:3000" yarn run build
 
 FROM base
 COPY --from=build /app/.next/standalone /app
