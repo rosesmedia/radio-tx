@@ -27,6 +27,7 @@ export default async function StreamEmbed({
       <StreamPlayer
         streamId={stream.fixtureId}
         isLive={stream.state === 'Live'}
+        logPlayerErrors
       />
     </Container>
   );

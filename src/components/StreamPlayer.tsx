@@ -21,11 +21,13 @@ import {
   IconRewindForward10,
 } from '@tabler/icons-react';
 import Hls from 'hls.js';
+import * as Sentry from '@sentry/nextjs';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface Props {
   streamId: string;
   isLive: boolean;
+  logPlayerErrors?: boolean;
 }
 
 const HLS_MIME = 'application/vnd.apple.mpegurl';
@@ -78,7 +80,7 @@ function logEvent<T>(event: string, action?: (t: T) => void): (t: T) => void {
   };
 }
 
-function StreamPlayerInner({ streamId, isLive }: Props) {
+function StreamPlayerInner({ streamId, isLive, logPlayerErrors }: Props) {
   const audio = useRef<HTMLAudioElement>(null);
   const [isPaused, setIsPaused] = useState(true);
   const [loading, setLoading] = useState(true);
@@ -103,6 +105,24 @@ function StreamPlayerInner({ streamId, isLive }: Props) {
           '../../node_modules/hls.js/dist/hls.worker.js',
           import.meta.url
         ).toString(),
+      });
+      hls.on(Hls.Events.ERROR, (_, data) => {
+        if (data.fatal) {
+          if (logPlayerErrors) Sentry.captureException(data);
+
+          switch (data.type) {
+            case Hls.ErrorTypes.MEDIA_ERROR:
+              console.error('attempting to recover from fatal media error');
+              hls.recoverMediaError();
+              break;
+            case Hls.ErrorTypes.NETWORK_ERROR:
+              console.error('fatal network error occured');
+              break;
+            default:
+              console.error('unrecoverable error occurred');
+              hls.destroy();
+          }
+        }
       });
       hls.loadSource(streamUrl);
       hls.attachMedia(audio.current);
