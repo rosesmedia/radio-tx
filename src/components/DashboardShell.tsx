@@ -25,6 +25,7 @@ export default function DashboardShell({
   return (
     <AppShell
       header={{ height: 60 }}
+      footer={{ height: 40 }}
       navbar={{
         width: 300,
         breakpoint: 'sm',

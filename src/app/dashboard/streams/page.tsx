@@ -13,6 +13,17 @@ import Link from 'next/link';
 
 export default async function StreamsPage() {
   const streams = await prisma.stream.findMany({
+    select: {
+      fixtureId: true,
+      name: true,
+      state: true,
+      ingestPoint: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
     orderBy: {
       fixtureId: 'asc',
     },
@@ -21,7 +32,10 @@ export default async function StreamsPage() {
   const rows = streams.map((stream) => (
     <TableTr key={stream.fixtureId}>
       <TableTd>
-        <StreamStatusIndicator stream={stream} />
+        <StreamStatusIndicator
+          state={stream.state}
+          ingestPointId={stream?.ingestPoint?.id}
+        />
       </TableTd>
       <TableTd>
         <Link href={`/dashboard/streams/${stream.fixtureId}`}>
@@ -29,6 +43,7 @@ export default async function StreamsPage() {
         </Link>
       </TableTd>
       <TableTd>{stream.fixtureId}</TableTd>
+      <TableTd>{stream.ingestPoint?.name ?? '<unset>'}</TableTd>
     </TableTr>
   ));
 
@@ -43,6 +58,7 @@ export default async function StreamsPage() {
             <TableTh>Status</TableTh>
             <TableTh>Name</TableTh>
             <TableTh>Fixture ID</TableTh>
+            <TableTh>Ingest</TableTh>
           </TableTr>
         </TableThead>
         <TableTbody>{rows}</TableTbody>

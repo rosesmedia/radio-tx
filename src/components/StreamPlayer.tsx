@@ -132,7 +132,7 @@ function StreamPlayerInner({ streamId, isLive, logPlayerErrors }: Props) {
         'StreamPlayerInner initialised when HLS is not supported. This should not happen!'
       );
     }
-  }, [streamUrl]);
+  }, [streamUrl, logPlayerErrors]);
 
   const togglePause = useCallback(() => {
     if (!audio.current) return;
