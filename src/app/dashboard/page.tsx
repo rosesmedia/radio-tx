@@ -5,7 +5,6 @@ import {
   Group,
   SimpleGrid,
   Stack,
-  Text,
   Title,
 } from '@mantine/core';
 import { IconAccessPoint } from '@tabler/icons-react';
