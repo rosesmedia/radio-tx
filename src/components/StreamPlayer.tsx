@@ -253,7 +253,7 @@ function StreamPlayerInner({ streamId, isLive, logPlayerErrors }: Props) {
         />
       </Group>
 
-      <Center hiddenFrom="sm">
+      <Center hiddenFrom="xxs">
         <Text>
           {formatTimestamp(currentTime)}{' '}
           {!isLive && !loading && <>/ {formatTimestamp(duration)}</>}
