@@ -73,6 +73,42 @@ export default function StreamPlayer(props: Props) {
   }
 }
 
+function PlayPauseButton({
+  isPaused,
+  loading,
+  togglePause,
+  hideOnMobile,
+}: {
+  isPaused: boolean;
+  loading: boolean;
+  togglePause: () => void;
+  hideOnMobile?: boolean;
+}) {
+  return (
+    <Tooltip
+      label={isPaused ? 'Pause' : 'Play'}
+      visibleFrom={hideOnMobile ? 'md' : undefined}
+    >
+      <ActionIcon
+        color="#ea3722"
+        size={64}
+        aria-label={isPaused === false ? 'play' : 'pause'}
+        onClick={() => togglePause()}
+        disabled={loading}
+        visibleFrom={hideOnMobile ? 'md' : undefined}
+      >
+        {loading ? (
+          <Loader color="white" />
+        ) : isPaused ? (
+          <IconPlayerPlay size={48} />
+        ) : (
+          <IconPlayerPause size={48} />
+        )}
+      </ActionIcon>
+    </Tooltip>
+  );
+}
+
 function logEvent<T>(event: string, action?: (t: T) => void): (t: T) => void {
   return (t) => {
     console.log(`[player] [event] ${event}`);
@@ -197,7 +233,7 @@ function StreamPlayerInner({ streamId, isLive, logPlayerErrors }: Props) {
       />
 
       <Group>
-        <Text>
+        <Text visibleFrom="md">
           {formatTimestamp(currentTime)}{' '}
           {!isLive && !loading && <>/ {formatTimestamp(duration)}</>}
         </Text>
@@ -217,7 +253,20 @@ function StreamPlayerInner({ streamId, isLive, logPlayerErrors }: Props) {
         />
       </Group>
 
-      <br />
+      <Center hiddenFrom="md">
+        <Text>
+          {formatTimestamp(currentTime)}{' '}
+          {!isLive && !loading && <>/ {formatTimestamp(duration)}</>}
+        </Text>
+      </Center>
+
+      <Group justify="center" hiddenFrom="md">
+        <PlayPauseButton
+          isPaused={isPaused}
+          loading={loading}
+          togglePause={togglePause}
+        />
+      </Group>
 
       <Group justify="center">
         {isLive && (
@@ -246,23 +295,12 @@ function StreamPlayerInner({ streamId, isLive, logPlayerErrors }: Props) {
           </ActionIcon>
         </Tooltip>
 
-        <Tooltip label={isPaused ? 'Pause' : 'Play'}>
-          <ActionIcon
-            color="#ea3722"
-            size={64}
-            aria-label={audio?.current?.paused === false ? 'play' : 'pause'}
-            onClick={() => togglePause()}
-            disabled={loading}
-          >
-            {loading ? (
-              <Loader color="white" />
-            ) : isPaused ? (
-              <IconPlayerPlay size={48} />
-            ) : (
-              <IconPlayerPause size={48} />
-            )}
-          </ActionIcon>
-        </Tooltip>
+        <PlayPauseButton
+          isPaused={isPaused}
+          loading={loading}
+          togglePause={togglePause}
+          hideOnMobile
+        />
 
         <Tooltip label="Skip 10 seconds">
           <ActionIcon
