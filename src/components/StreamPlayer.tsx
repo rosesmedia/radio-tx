@@ -87,7 +87,7 @@ function PlayPauseButton({
   return (
     <Tooltip
       label={isPaused ? 'Pause' : 'Play'}
-      visibleFrom={hideOnMobile ? 'md' : undefined}
+      visibleFrom={hideOnMobile ? 'xxs' : undefined}
     >
       <ActionIcon
         color="#ea3722"
@@ -95,7 +95,7 @@ function PlayPauseButton({
         aria-label={isPaused === false ? 'play' : 'pause'}
         onClick={() => togglePause()}
         disabled={loading}
-        visibleFrom={hideOnMobile ? 'md' : undefined}
+        visibleFrom={hideOnMobile ? 'xxs' : undefined}
       >
         {loading ? (
           <Loader color="white" />
@@ -233,7 +233,7 @@ function StreamPlayerInner({ streamId, isLive, logPlayerErrors }: Props) {
       />
 
       <Group>
-        <Text visibleFrom="md">
+        <Text visibleFrom="xxs">
           {formatTimestamp(currentTime)}{' '}
           {!isLive && !loading && <>/ {formatTimestamp(duration)}</>}
         </Text>
@@ -253,14 +253,14 @@ function StreamPlayerInner({ streamId, isLive, logPlayerErrors }: Props) {
         />
       </Group>
 
-      <Center hiddenFrom="md">
+      <Center hiddenFrom="sm">
         <Text>
           {formatTimestamp(currentTime)}{' '}
           {!isLive && !loading && <>/ {formatTimestamp(duration)}</>}
         </Text>
       </Center>
 
-      <Group justify="center" hiddenFrom="md">
+      <Group justify="center" hiddenFrom="xxs">
         <PlayPauseButton
           isPaused={isPaused}
           loading={loading}

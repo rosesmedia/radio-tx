@@ -1,12 +1,5 @@
 import { prisma } from '@/lib/db';
-import {
-  Card,
-  Center,
-  Group,
-  SimpleGrid,
-  Stack,
-  Title,
-} from '@mantine/core';
+import { Card, Center, Group, SimpleGrid, Stack, Title } from '@mantine/core';
 import { IconAccessPoint } from '@tabler/icons-react';
 
 export default async function DashboardPage() {

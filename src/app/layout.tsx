@@ -1,5 +1,6 @@
 import {
   ColorSchemeScript,
+  createTheme,
   mantineHtmlProps,
   MantineProvider,
 } from '@mantine/core';
@@ -12,6 +13,12 @@ export const metadata = {
   description: 'I broadcast the sounds',
 };
 
+const theme = createTheme({
+  breakpoints: {
+    xxs: '22em',
+  },
+});
+
 export default function RootLayout({
   children,
 }: {
@@ -23,7 +30,7 @@ export default function RootLayout({
         <ColorSchemeScript />
       </head>
       <body>
-        <MantineProvider>{children}</MantineProvider>
+        <MantineProvider theme={theme}>{children}</MantineProvider>
       </body>
     </html>
   );
