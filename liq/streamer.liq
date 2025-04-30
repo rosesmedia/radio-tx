@@ -37,9 +37,9 @@ in = input.jack(id="streamer_#{stream_id}")
 
 source = ref(2)
 
-starting = amplify(0.5, single("/opt/radio-tx/starting.mp3"))
-ended = amplify(0.5, single("/opt/radio-tx/ended.mp3"))
-techdiff = amplify(0.5, single("/opt/radio-tx/techdiff.mp3"))
+starting = amplify(0.5, single("/opt/radio-tx/starting.wav"))
+ended = amplify(0.5, single("/opt/radio-tx/ended.wav"))
+techdiff = amplify(0.5, single("/opt/radio-tx/techdiff.wav"))
 
 def handle_set_source(request, response) =
     response.status_code(200)
