@@ -1,11 +1,12 @@
 import StreamPlayer from '@/components/StreamPlayer';
 import { prisma } from '@/lib/db';
-import { Container } from '@mantine/core';
+import { Center, Container, Loader, Stack, Title } from '@mantine/core';
 import { notFound } from 'next/navigation';
 
 import './style.css';
 import Script from 'next/script';
 import { env } from '@/lib/env';
+import { IconHourglass } from '@tabler/icons-react';
 
 export default async function StreamEmbed({
   params,
@@ -20,8 +21,24 @@ export default async function StreamEmbed({
   });
 
   // TODO: maybe a "not live yet" page instead of a 404
-  if (!stream || stream.state === 'Pending') {
+  if (!stream) {
     return notFound();
+  }
+
+  if (stream.state === 'Pending') {
+    return <Container pt={40}>
+      <Stack>
+        <Center>
+          <IconHourglass className='hourglass-spin' size={48} color='#ea3722' />
+        </Center>
+
+        <Center>
+          <Title order={1}>
+            This stream hasn't started yet
+          </Title>
+        </Center>
+      </Stack>
+    </Container>
   }
 
   return (
