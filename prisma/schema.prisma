@@ -31,6 +31,8 @@ model Stream {
   ingestPointId String?
   controlPort Int? @unique
 
+  hideOnDashboard Boolean @default(false)
+
   HlsSegment HlsSegment[]
 }
 

@@ -17,6 +17,7 @@ export default async function StreamsPage() {
       fixtureId: true,
       name: true,
       state: true,
+      hideOnDashboard: true,
       ingestPoint: {
         select: {
           id: true,
@@ -29,7 +30,7 @@ export default async function StreamsPage() {
     },
   });
 
-  const rows = streams.map((stream) => (
+  const rows = streams.filter(stream => !stream.hideOnDashboard).map((stream) => (
     <TableTr key={stream.fixtureId}>
       <TableTd>
         <StreamStatusIndicator
