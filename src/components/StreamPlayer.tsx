@@ -68,7 +68,7 @@ export default function StreamPlayer(props: Props) {
   if (supported === null) {
     return (
       <Center>
-        <Loader color="red" />
+        <Loader color="#ea3722" />
       </Center>
     );
   } else if (supported) {
