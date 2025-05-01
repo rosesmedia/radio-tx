@@ -26,7 +26,7 @@ export default async function StreamsPage() {
       },
     },
     orderBy: {
-      fixtureId: 'asc',
+      name: 'asc',
     },
   });
 
