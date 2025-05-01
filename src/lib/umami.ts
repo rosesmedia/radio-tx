@@ -1,7 +1,7 @@
 'use client';
 
 interface Umami {
-  track: (event: string, data: any) => void;
+  track: (event: string, data: unknown) => void;
 }
 
 export function maybeGetUmami(): Umami | null {

@@ -1,6 +1,6 @@
 import StreamPlayer from '@/components/StreamPlayer';
 import { prisma } from '@/lib/db';
-import { Center, Container, Loader, Stack, Title } from '@mantine/core';
+import { Center, Container, Stack, Title } from '@mantine/core';
 import { notFound } from 'next/navigation';
 
 import './style.css';
@@ -26,19 +26,23 @@ export default async function StreamEmbed({
   }
 
   if (stream.state === 'Pending') {
-    return <Container pt={40}>
-      <Stack>
-        <Center>
-          <IconHourglass className='hourglass-spin' size={48} color='#ea3722' />
-        </Center>
+    return (
+      <Container pt={40}>
+        <Stack>
+          <Center>
+            <IconHourglass
+              className="hourglass-spin"
+              size={48}
+              color="#ea3722"
+            />
+          </Center>
 
-        <Center>
-          <Title order={1}>
-            This stream hasn't started yet
-          </Title>
-        </Center>
-      </Stack>
-    </Container>
+          <Center>
+            <Title order={1}>This stream hasn&apos;t started yet</Title>
+          </Center>
+        </Stack>
+      </Container>
+    );
   }
 
   return (

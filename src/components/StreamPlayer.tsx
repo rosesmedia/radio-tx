@@ -227,7 +227,7 @@ function StreamPlayerInner({ streamId, isLive, logPlayerErrors }: Props) {
         setHasStartedPlaying(true);
       }
     },
-    [hasStartedPlaying]
+    [hasStartedPlaying, isLive, streamId]
   );
 
   return (

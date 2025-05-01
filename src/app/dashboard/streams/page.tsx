@@ -30,23 +30,25 @@ export default async function StreamsPage() {
     },
   });
 
-  const rows = streams.filter(stream => !stream.hideOnDashboard).map((stream) => (
-    <TableTr key={stream.fixtureId}>
-      <TableTd>
-        <StreamStatusIndicator
-          state={stream.state}
-          ingestPointId={stream?.ingestPoint?.id}
-        />
-      </TableTd>
-      <TableTd>
-        <Link href={`/dashboard/streams/${stream.fixtureId}`}>
-          {stream.name}
-        </Link>
-      </TableTd>
-      <TableTd>{stream.fixtureId}</TableTd>
-      <TableTd>{stream.ingestPoint?.name ?? '<unset>'}</TableTd>
-    </TableTr>
-  ));
+  const rows = streams
+    .filter((stream) => !stream.hideOnDashboard)
+    .map((stream) => (
+      <TableTr key={stream.fixtureId}>
+        <TableTd>
+          <StreamStatusIndicator
+            state={stream.state}
+            ingestPointId={stream?.ingestPoint?.id}
+          />
+        </TableTd>
+        <TableTd>
+          <Link href={`/dashboard/streams/${stream.fixtureId}`}>
+            {stream.name}
+          </Link>
+        </TableTd>
+        <TableTd>{stream.fixtureId}</TableTd>
+        <TableTd>{stream.ingestPoint?.name ?? '<unset>'}</TableTd>
+      </TableTr>
+    ));
 
   return (
     <>
