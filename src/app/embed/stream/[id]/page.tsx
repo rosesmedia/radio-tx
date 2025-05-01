@@ -4,6 +4,8 @@ import { Container } from '@mantine/core';
 import { notFound } from 'next/navigation';
 
 import './style.css';
+import Script from 'next/script';
+import { env } from '@/lib/env';
 
 export default async function StreamEmbed({
   params,
@@ -29,6 +31,14 @@ export default async function StreamEmbed({
         isLive={stream.state === 'Live'}
         logPlayerErrors
       />
+
+      {env.UMAMI_SCRIPT && env.UMAMI_SITE_ID && (
+        <Script
+          defer
+          src={env.UMAMI_SCRIPT}
+          data-website-id={env.UMAMI_SITE_ID}
+        />
+      )}
     </Container>
   );
 }

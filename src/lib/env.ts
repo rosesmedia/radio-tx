@@ -31,6 +31,8 @@ const envSchema = z.object({
   STREAM_CONTROLLER_TOKEN: z.string(),
   DASHBOARD_USER: z.string(),
   DASHBOARD_PASS: z.string(),
+  UMAMI_SCRIPT: z.string().optional(),
+  UMAMI_SITE_ID: z.string().optional(),
 });
 
 /* eslint-disable @typescript-eslint/no-explicit-any */

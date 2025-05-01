@@ -22,7 +22,14 @@ import {
 } from '@tabler/icons-react';
 import Hls from 'hls.js';
 import * as Sentry from '@sentry/nextjs';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import { maybeGetUmami } from '@/lib/umami';
 
 interface Props {
   streamId: string;
@@ -42,6 +49,13 @@ function formatTimestamp(timestamp: number): string {
 
 function supportsHls(): boolean {
   return new Audio().canPlayType(HLS_MIME) !== '' || Hls.isSupported();
+}
+
+function maybeLogPlay(fixtureId: string, isLive: boolean, timestamp: number) {
+  maybeGetUmami()?.track(`play-${isLive ? 'live' : 'catchup'}`, {
+    fixtureId,
+    timestamp,
+  });
 }
 
 export default function StreamPlayer(props: Props) {
@@ -122,6 +136,7 @@ function StreamPlayerInner({ streamId, isLive, logPlayerErrors }: Props) {
   const [loading, setLoading] = useState(true);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [hasStartedPlaying, setHasStartedPlaying] = useState(false);
 
   const streamUrl = `/api/stream/${streamId}/playlist.m3u8`;
 
@@ -204,11 +219,22 @@ function StreamPlayerInner({ streamId, isLive, logPlayerErrors }: Props) {
     audio.current.currentTime = Math.max(0, audio.current.duration - 8);
   }, [audio, loading]);
 
+  const onPlay = useCallback(
+    (e: SyntheticEvent<HTMLAudioElement>) => {
+      setIsPaused(false);
+      if (!hasStartedPlaying) {
+        maybeLogPlay(streamId, isLive, e.currentTarget.currentTime);
+        setHasStartedPlaying(true);
+      }
+    },
+    [hasStartedPlaying]
+  );
+
   return (
     <Stack>
       <audio
         ref={audio}
-        onPlay={logEvent('onPlay', () => setIsPaused(false))}
+        onPlay={logEvent('onPlay', onPlay)}
         onPause={logEvent('onPause', () => setIsPaused(true))}
         // safari iOS seems to send the onWaiting event when the stream is still playing, so we make sure we aren't been lied to
         onStalled={logEvent('onWaiting', (e) =>
