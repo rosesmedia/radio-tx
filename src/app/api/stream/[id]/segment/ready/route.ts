@@ -24,9 +24,9 @@ export const POST = postHandler(
       },
     });
     if (USE_REDIS) {
-      await redis.rPush(
-        `stream:${fixtureId}:segments`,
-        `#EXTINF:${result.duration},\n${env.HLS_SEGMENTS_URL}/${result.fixtureId}/${result.filename}`
+      await redis.append(
+        `stream:${fixtureId}:playlist`,
+        `#EXTINF:${result.duration},\n${env.HLS_SEGMENTS_URL}/${result.fixtureId}/${result.filename}\n`
       );
     }
     return NextResponse.json(result);

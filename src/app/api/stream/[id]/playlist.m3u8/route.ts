@@ -15,13 +15,9 @@ export const GET = getHandler(async ({ id }: { id: string }) => {
     // resp.push('#EXT-X-DISCONTINUITY-SEQUENCE:0');
     resp.push('#EXT-X-PLAYLIST-TYPE:EVENT');
 
-    const segments = await redis.lRange(
-      `stream:${id}:segments`,
-      0,
-      -1
-    );
+    const segments = await redis.get(`stream:${id}:playlist`);
 
-    const playlist = [...resp, ...segments];
+    const playlist = [...resp, segments];
 
     if (await redis.sIsMember('complete_streams', id)) {
       playlist.push('#EXT-X-ENDLIST');
