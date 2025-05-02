@@ -19,7 +19,24 @@ export const GET = getHandler(async ({ id }: { id: string }) => {
 
     const playlist = [...resp, (segments ?? "")];
 
+    let done = false;
     if (await redis.sIsMember('complete_streams', id)) {
+      done = true;
+    } else {
+      // fall back to the DB
+      const stream = await prisma.stream.findFirstOrThrow({
+        where: {
+          fixtureId: id,
+        },
+        select: {
+          state: true,
+        },
+      });
+      if (stream.state === 'Complete') {
+        done = true;
+      }
+    }
+    if (done) {
       playlist.push('#EXT-X-ENDLIST');
     }
 
