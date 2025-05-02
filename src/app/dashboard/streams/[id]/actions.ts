@@ -9,6 +9,7 @@ import {
   notifyStreamStop,
   setStreamSource,
 } from '@/lib/stream-controller';
+import { redis, USE_REDIS } from '@/lib/redis';
 
 export const startStream = action(startStreamSchema, async ({ id }) => {
   const stream = await prisma.stream.findUniqueOrThrow({
@@ -34,6 +35,12 @@ export const endStream = action(startStreamSchema, async ({ id }) => {
     where: { fixtureId: id },
     data: { state: 'Complete' },
   });
+  if (USE_REDIS) {
+    await redis.sAdd(
+      "complete_streams",
+      stream.fixtureId
+    );
+  }
 
   await notifyStreamStop(stream.fixtureId);
 });
