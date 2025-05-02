@@ -17,7 +17,7 @@ export const GET = getHandler(async ({ id }: { id: string }) => {
 
     const segments = await redis.get(`stream:${id}:playlist`);
 
-    const playlist = [...resp, segments];
+    const playlist = [...resp, (segments ?? "")];
 
     if (await redis.sIsMember('complete_streams', id)) {
       playlist.push('#EXT-X-ENDLIST');
