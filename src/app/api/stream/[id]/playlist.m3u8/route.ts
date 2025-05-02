@@ -34,6 +34,7 @@ export const GET = getHandler(async ({ id }: { id: string }) => {
       });
       if (stream.state === 'Complete') {
         done = true;
+        await redis.sAdd('complete_streams', id);
       }
     }
     if (done) {
